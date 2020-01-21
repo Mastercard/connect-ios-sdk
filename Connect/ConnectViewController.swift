@@ -2,40 +2,41 @@
 //  ConnectViewController.swift
 //  Connect
 //
-//  Created by Sid Pitt on 12/16/19.
-//  Copyright © 2019 finicity. All rights reserved.
+//  Copyright © 2020 finicity. All rights reserved.
 //
 
 import WebKit
-import SafariServices
 
 public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
-    var safariViewController:SFSafariViewController? = nil;
     var webView: WKWebView!
     var childWebView: WKWebView!
-    var isWebViewLoaded = false;
-    var isChildWebViewLoaded = false;
+    var isWebViewLoaded = false
+    var isChildWebViewLoaded = false
     
     var loadedFunction: (() -> Void)!
     var closedFunction: (() -> Void)!
+    var errorFunction: ((String) -> Void)!
     
     var redirectUrl = ""
+    var closeOnRedirect = false
+    var closeOnComplete = true
     
     var parentToolbarItems: [UIBarButtonItem]?
     
+    var currentHost = ""
+    var parentHost = ""
+    
+    var messageNameComplete = "complete"
+    var messageNameError = "error"
+    var defaultErrorMessage = "Connect Error"
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
-        
-        let nc = NotificationCenter.default
-        let notificationName = Notification.Name("closesafariViewController");
-        // Register to receive notification
-        nc.addObserver(self, selector: #selector(self.closeSafariViewController), name: notificationName, object: nil);
+        // Do any additional setup after loading the view.
     }
     
     override public func didMove(toParent parent: UIViewController?) {
         self.parentToolbarItems = parent?.toolbarItems
-        
-        print("didMove!!")
         
         parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(unloadChildWebView))
 
@@ -48,53 +49,32 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         navigationController?.setNavigationBarHidden(true, animated: false);
     }
     
-    public func load(connectUrl: String, redirectUrl: String, onLoaded: @escaping () -> Void, onClosed: @escaping () -> Void) {
+    public func load(connectUrl: String, redirectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
+        self.closeOnRedirect = true
+        self.closeOnComplete = false
+        
         self.redirectUrl = redirectUrl
         self.loadedFunction = onLoaded
+        self.errorFunction = onError
         self.closedFunction = onClosed
-        print("load...")
         DispatchQueue.main.async {
             self.showWebView(connectUrl: connectUrl)
         }
     }
     
-    public func loadSafari(connectUrl: String) -> SFSafariViewController? {
-        if let url = URL(string: connectUrl) {
-            let config = SFSafariViewController.Configuration()
-            config.entersReaderIfAvailable = true
-            
-            let sfViewController = SFSafariViewController(url: url, configuration: config)
-            
-            self.safariViewController = sfViewController
-            return sfViewController
-//            self.present(self.safariViewController!, animated: true)
-        }
-        
-        return nil
-    }
-    
-    public func openWebKit(connectUrl: String, onLoaded: @escaping () -> Void, onClosed: @escaping () -> Void) {
+    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
+        self.closeOnRedirect = false
+        self.closeOnComplete = true
         
         self.loadedFunction = onLoaded
+        self.errorFunction = onError
         self.closedFunction = onClosed
         DispatchQueue.main.async {
             self.showWebView(connectUrl: connectUrl)
         }
-    }
-    
-    public func closeWebKit() {
-        self.willMove(toParent: nil)
-        self.removeFromParent()
-        self.view.removeFromSuperview()
     }
     
     public func closeAndRemove() {
-//        if ((self.webView) != nil) {
-//            self.webView.removeFromSuperview()
-//            self.webView.navigationDelegate = nil
-//            self.webView.uiDelegate = nil
-//            self.webView = nil
-//        }
         self.willMove(toParent: nil)
         self.removeFromParent()
         self.view.removeFromSuperview()
@@ -105,7 +85,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             if (self.webView == nil) {
                 let config = WKWebViewConfiguration()
                 let userContentController = WKUserContentController()
-                userContentController.add(self, name: "complete")
+                userContentController.add(self, name: self.messageNameComplete)
+                userContentController.add(self, name: self.messageNameError)
                 config.userContentController = userContentController
                 
                 self.webView = WKWebView(frame: .zero, configuration: config)
@@ -123,46 +104,41 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
-        print("observeValue.. " + (keyPath ?? "nil"))
         if keyPath == "estimatedProgress" && !self.isWebViewLoaded {
-            print(Float(self.webView.estimatedProgress))
             if (self.webView.estimatedProgress == 1.0) {
                 self.isWebViewLoaded = true
                 self.loadedFunction()
-            }
-        }
-        if keyPath == "title" {
-            if let title = webView.title {
-                print(title)
             }
         }
     }
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let host = navigationAction.request.url?.host {
-            print(host)
             if (navigationController?.navigationBar.isHidden == false) {
                 navigationItem.title = host;
             }
             
-            if self.redirectUrl.contains(host) {
-                print("redirectUrl match. calling closedFunction")
+            if self.redirectUrl.contains(host) && self.closeOnRedirect {
                 decisionHandler(.cancel)
                 self.closedFunction()
                 return
             }
             
+            // TODO: localhost is not the correct url to check. should it check
+            // against a passed in string on load, or save off the old host prior to
+            // loading childWebView and check for that?
             if host.contains("localhost") && self.isChildWebViewLoaded {
                 decisionHandler(.cancel)
                 self.unloadChildWebView()
                 return
             }
+            
+            self.currentHost = host
         }
         decisionHandler(.allow)
     }
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        print("---navigationType---",navigationAction.navigationType.rawValue)
         if navigationAction.targetFrame == nil {
             self.loadChildWebView(url: (navigationAction.request.url)!)
         }
@@ -173,10 +149,14 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.closedFunction()
     }
     func loadChildWebView(url: URL)  {
+        self.parentHost = self.currentHost
         self.isChildWebViewLoaded = true;
-        navigationController?.setNavigationBarHidden(false, animated: true);
+        
+        navigationController?.setNavigationBarHidden(false, animated: true)
+        
         var customRequest = URLRequest(url: url)
         customRequest.setValue("true", forHTTPHeaderField: "x-custom-header")
+        
         self.childWebView = WKWebView()
         self.childWebView.frame = self.view.frame
         self.childWebView.navigationDelegate = self
@@ -184,6 +164,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.childWebView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         self.childWebView.load(customRequest)
         self.childWebView.allowsBackForwardNavigationGestures = true
+        
         self.view.addSubview(self.childWebView)
     }
     
@@ -203,15 +184,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             print(messageBody)
         }
         
-        if message.name == "complete" {
+        if message.name == self.messageNameComplete && self.closeOnComplete {
             self.closedFunction()
+        } else if message.name == self.messageNameError {
+            self.errorFunction(message.body as? String ?? self.defaultErrorMessage)
         }
         
-    }
-    
-    @objc func closeSafariViewController(){
-        if ((self.safariViewController) != nil){
-            self.safariViewController?.dismiss(animated: true, completion:nil);
-        }
     }
 }

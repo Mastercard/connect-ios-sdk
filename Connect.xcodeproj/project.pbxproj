@@ -10,7 +10,6 @@
 		6B94CDE423A819F30077D65A /* Connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94CDDA23A819F20077D65A /* Connect.framework */; };
 		6B94CDE923A819F30077D65A /* ConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B94CDE823A819F30077D65A /* ConnectTests.swift */; };
 		6B94CDEB23A819F30077D65A /* Connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B94CDDD23A819F20077D65A /* Connect.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		6B94CDF623A81A2D0077D65A /* SafariServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94CDF523A81A2D0077D65A /* SafariServices.framework */; };
 		6B94CDF823A81AA50077D65A /* ConnectViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B94CDF723A81AA50077D65A /* ConnectViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -31,7 +30,6 @@
 		6B94CDE323A819F30077D65A /* ConnectTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ConnectTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B94CDE823A819F30077D65A /* ConnectTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectTests.swift; sourceTree = "<group>"; };
 		6B94CDEA23A819F30077D65A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		6B94CDF523A81A2D0077D65A /* SafariServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SafariServices.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks/SafariServices.framework; sourceTree = DEVELOPER_DIR; };
 		6B94CDF723A81AA50077D65A /* ConnectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -40,7 +38,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B94CDF623A81A2D0077D65A /* SafariServices.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -61,7 +58,6 @@
 				6B94CDDC23A819F20077D65A /* Connect */,
 				6B94CDE723A819F30077D65A /* ConnectTests */,
 				6B94CDDB23A819F20077D65A /* Products */,
-				6B94CDF423A81A2D0077D65A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -91,14 +87,6 @@
 				6B94CDEA23A819F30077D65A /* Info.plist */,
 			);
 			path = ConnectTests;
-			sourceTree = "<group>";
-		};
-		6B94CDF423A81A2D0077D65A /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				6B94CDF523A81A2D0077D65A /* SafariServices.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

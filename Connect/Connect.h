@@ -2,8 +2,7 @@
 //  Connect.h
 //  Connect
 //
-//  Created by Sid Pitt on 12/16/19.
-//  Copyright © 2019 finicity. All rights reserved.
+//  Copyright © 2020 finicity. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
