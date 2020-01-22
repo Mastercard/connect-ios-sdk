@@ -17,7 +17,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var closedFunction: (() -> Void)!
     var errorFunction: ((String) -> Void)!
     
-    var redirectUrl = ""
+    internal var targetConnectUrl = ""
+    internal var redirectUrl = ""
     var closeOnRedirect = false
     var closeOnComplete = true
     
@@ -53,6 +54,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.closeOnRedirect = true
         self.closeOnComplete = false
         
+        self.targetConnectUrl = connectUrl
         self.redirectUrl = redirectUrl
         self.loadedFunction = onLoaded
         self.errorFunction = onError
@@ -66,6 +68,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.closeOnRedirect = false
         self.closeOnComplete = true
         
+        self.targetConnectUrl = connectUrl
         self.loadedFunction = onLoaded
         self.errorFunction = onError
         self.closedFunction = onClosed
@@ -107,7 +110,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         if keyPath == "estimatedProgress" && !self.isWebViewLoaded {
             if (self.webView.estimatedProgress == 1.0) {
                 self.isWebViewLoaded = true
-                self.loadedFunction()
+                self.handleLoadingComplete()
             }
         }
     }
@@ -120,7 +123,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             
             if self.redirectUrl.contains(host) && self.closeOnRedirect {
                 decisionHandler(.cancel)
-                self.closedFunction()
+                self.handleConnectComplete()
                 return
             }
             
@@ -146,7 +149,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func webViewDidClose(_ webView: WKWebView) {
-        self.closedFunction()
+        self.handleConnectComplete()
     }
     func loadChildWebView(url: URL)  {
         self.parentHost = self.currentHost
@@ -185,10 +188,22 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
         
         if message.name == self.messageNameComplete && self.closeOnComplete {
-            self.closedFunction()
+            self.handleConnectComplete()
         } else if message.name == self.messageNameError {
-            self.errorFunction(message.body as? String ?? self.defaultErrorMessage)
+            self.handleConnectError(message.body as? String)
         }
         
+    }
+    
+    internal func handleLoadingComplete() {
+        self.loadedFunction()
+    }
+    
+    internal func handleConnectComplete() {
+        self.closedFunction()
+    }
+    
+    internal func handleConnectError(_ msg: String?) {
+        self.errorFunction(msg ?? self.defaultErrorMessage)
     }
 }
