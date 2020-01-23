@@ -7,6 +7,26 @@
 
 import WebKit
 
+public struct ConnectViewConfig {
+    public var connectUrl: String
+    public var redirectUrl: String?
+    public var loaded: (() -> Void)!
+    public var success: (() -> Void)!
+    public var error: ((String) -> Void)!
+    
+    public init(connectUrl: String,
+         redirectUrl: String? = nil,
+         loaded: (() -> Void)? = nil,
+         success: (() -> Void)? = nil,
+         error: ((String) -> Void)? = nil) {
+        self.connectUrl = connectUrl
+        self.redirectUrl = redirectUrl
+        self.loaded = loaded
+        self.success = success
+        self.error = error
+    }
+}
+
 public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
     var webView: WKWebView!
     var childWebView: WKWebView!
@@ -17,8 +37,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var closedFunction: (() -> Void)!
     var errorFunction: ((String) -> Void)!
     
-    internal var targetConnectUrl = ""
-    internal var redirectUrl = ""
+    internal var connectUrl: String = ""
+    internal var redirectUrl: String!
     var closeOnRedirect = false
     var closeOnComplete = true
     
@@ -50,11 +70,31 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         navigationController?.setNavigationBarHidden(true, animated: false);
     }
     
+    public func load(config: ConnectViewConfig) {
+        self.connectUrl = config.connectUrl
+        self.redirectUrl = config.redirectUrl
+        self.loadedFunction = config.loaded
+        self.errorFunction = config.error
+        self.closedFunction = config.success
+        
+        if self.redirectUrl != nil {
+            self.closeOnRedirect = true
+            self.closeOnComplete = false
+        } else {
+            self.closeOnRedirect = false
+            self.closeOnComplete = true
+        }
+        
+        DispatchQueue.main.async {
+            self.showWebView(connectUrl: self.connectUrl)
+        }
+    }
+    
     public func load(connectUrl: String, redirectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
         self.closeOnRedirect = true
         self.closeOnComplete = false
         
-        self.targetConnectUrl = connectUrl
+        self.connectUrl = connectUrl
         self.redirectUrl = redirectUrl
         self.loadedFunction = onLoaded
         self.errorFunction = onError
@@ -68,7 +108,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.closeOnRedirect = false
         self.closeOnComplete = true
         
-        self.targetConnectUrl = connectUrl
+        self.connectUrl = connectUrl
         self.loadedFunction = onLoaded
         self.errorFunction = onError
         self.closedFunction = onClosed
@@ -121,10 +161,12 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 navigationItem.title = host;
             }
             
-            if self.redirectUrl.contains(host) && self.closeOnRedirect {
-                decisionHandler(.cancel)
-                self.handleConnectComplete()
-                return
+            if self.redirectUrl != nil && self.closeOnRedirect {
+                if self.redirectUrl.contains(host) {
+                    decisionHandler(.cancel)
+                    self.handleConnectComplete()
+                    return
+                }
             }
             
             // TODO: localhost is not the correct url to check. should it check
@@ -192,18 +234,23 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         } else if message.name == self.messageNameError {
             self.handleConnectError(message.body as? String)
         }
-        
     }
     
     internal func handleLoadingComplete() {
-        self.loadedFunction()
+        if self.loadedFunction != nil {
+            self.loadedFunction()
+        }
     }
     
     internal func handleConnectComplete() {
-        self.closedFunction()
+        if self.closedFunction != nil {
+            self.closedFunction()
+        }
     }
     
     internal func handleConnectError(_ msg: String?) {
-        self.errorFunction(msg ?? self.defaultErrorMessage)
+        if self.errorFunction != nil {
+            self.errorFunction(msg ?? self.defaultErrorMessage)
+        }
     }
 }

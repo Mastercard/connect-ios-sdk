@@ -32,7 +32,7 @@ class ConnectTests: XCTestCase {
         let cvc = ConnectViewController()
         cvc.load(connectUrl: "testConnectUrl", redirectUrl: "testRedirectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
         
-        XCTAssertEqual("testConnectUrl", cvc.targetConnectUrl)
+        XCTAssertEqual("testConnectUrl", cvc.connectUrl)
         XCTAssertEqual("testRedirectUrl", cvc.redirectUrl)
     }
     
