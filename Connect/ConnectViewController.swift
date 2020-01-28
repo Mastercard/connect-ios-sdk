@@ -7,6 +7,14 @@
 
 import WebKit
 
+class ConnectWebView: WKWebView {
+    override var inputAccessoryView: UIView? {
+        // Overriding the default inputAccessoryView so the 'Done' button
+        // does not appear when forms are focused.
+        return nil
+    }
+}
+
 public struct ConnectViewConfig {
     public var connectUrl: String
     public var redirectUrl: String?
@@ -28,8 +36,8 @@ public struct ConnectViewConfig {
 }
 
 public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
-    var webView: WKWebView!
-    var childWebView: WKWebView!
+    var webView: ConnectWebView!
+    var childWebView: ConnectWebView!
     var isWebViewLoaded = false
     var isChildWebViewLoaded = false
     
@@ -47,8 +55,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var currentHost = ""
     var parentHost = ""
     
-    var messageNameComplete = "complete"
-    var messageNameError = "error"
+    var messageNameConnect = "iosConnect"
+    var messageTypeUrl = "url"
+    var messageTypeError = "error"
+    var messageTypeComplete = "complete"
     var defaultErrorMessage = "Connect Error"
     
     override public func viewDidLoad() {
@@ -128,11 +138,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             if (self.webView == nil) {
                 let config = WKWebViewConfiguration()
                 let userContentController = WKUserContentController()
-                userContentController.add(self, name: self.messageNameComplete)
-                userContentController.add(self, name: self.messageNameError)
+                userContentController.add(self, name: self.messageNameConnect)
                 config.userContentController = userContentController
                 
-                self.webView = WKWebView(frame: .zero, configuration: config)
+                self.webView = ConnectWebView(frame: .zero, configuration: config)
                 self.webView.frame = self.view.frame
                 self.webView.navigationDelegate = self
                 self.webView.uiDelegate = self
@@ -169,11 +178,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 }
             }
             
-            // TODO: localhost is not the correct url to check. should it check
-            // against a passed in string on load, or save off the old host prior to
-            // loading childWebView and check for that?
-            if host.contains("localhost") && self.isChildWebViewLoaded {
+            if self.isChildWebViewLoaded && host == self.parentHost {
                 decisionHandler(.cancel)
+                self.currentHost = host
                 self.unloadChildWebView()
                 return
             }
@@ -184,6 +191,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        // TODO: When would this happen? - Not during OAuth
+        print("Loading ChildWebView from non-standard location")
         if navigationAction.targetFrame == nil {
             self.loadChildWebView(url: (navigationAction.request.url)!)
         }
@@ -193,6 +202,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     public func webViewDidClose(_ webView: WKWebView) {
         self.handleConnectComplete()
     }
+    
     func loadChildWebView(url: URL)  {
         self.parentHost = self.currentHost
         self.isChildWebViewLoaded = true;
@@ -202,7 +212,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         var customRequest = URLRequest(url: url)
         customRequest.setValue("true", forHTTPHeaderField: "x-custom-header")
         
-        self.childWebView = WKWebView()
+        self.childWebView = ConnectWebView()
         self.childWebView.frame = self.view.frame
         self.childWebView.navigationDelegate = self
         self.childWebView.uiDelegate = self
@@ -220,19 +230,26 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             self.childWebView.removeFromSuperview()
             self.childWebView.navigationDelegate = nil
             self.childWebView = nil
+            
+            print("unload child web view --- eval js")
+            let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
+            self.webView.evaluateJavaScript(js)
         }
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        print(message.name)
-        if let messageBody = message.body as? String {
-            print(messageBody)
-        }
-        
-        if message.name == self.messageNameComplete && self.closeOnComplete {
-            self.handleConnectComplete()
-        } else if message.name == self.messageNameError {
-            self.handleConnectError(message.body as? String)
+        if let messageBody = message.body as? [String: Any], let type = messageBody["type"] as? String {
+            if type == self.messageTypeUrl, let urlString = messageBody["url"] as? String {
+                if let url = URL(string: urlString) {
+                    self.loadChildWebView(url: url)
+                }
+            } else if type == self.messageTypeError {
+                self.handleConnectError(type)
+            } else if type == self.messageTypeComplete {
+                if self.closeOnComplete {
+                    self.handleConnectComplete()
+                }
+            }
         }
     }
     
