@@ -17,18 +17,15 @@ class ConnectWebView: WKWebView {
 
 public struct ConnectViewConfig {
     public var connectUrl: String
-    public var redirectUrl: String?
     public var loaded: (() -> Void)!
     public var success: (() -> Void)!
     public var error: ((String) -> Void)!
     
     public init(connectUrl: String,
-         redirectUrl: String? = nil,
          loaded: (() -> Void)? = nil,
          success: (() -> Void)? = nil,
          error: ((String) -> Void)? = nil) {
         self.connectUrl = connectUrl
-        self.redirectUrl = redirectUrl
         self.loaded = loaded
         self.success = success
         self.error = error
@@ -46,19 +43,14 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var errorFunction: ((String) -> Void)!
     
     internal var connectUrl: String = ""
-    internal var redirectUrl: String!
-    var closeOnRedirect = false
-    var closeOnComplete = true
     
     var parentToolbarItems: [UIBarButtonItem]?
-    
-    var currentHost = ""
-    var parentHost = ""
     
     var messageNameConnect = "iosConnect"
     var messageTypeUrl = "url"
     var messageTypeError = "error"
-    var messageTypeComplete = "complete"
+    var messageTypeDone = "done"
+    var messageTypeClosePopup = "closePopup"
     var defaultErrorMessage = "Connect Error"
     
     override public func viewDidLoad() {
@@ -82,42 +74,16 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     public func load(config: ConnectViewConfig) {
         self.connectUrl = config.connectUrl
-        self.redirectUrl = config.redirectUrl
         self.loadedFunction = config.loaded
         self.errorFunction = config.error
         self.closedFunction = config.success
-        
-        if self.redirectUrl != nil {
-            self.closeOnRedirect = true
-            self.closeOnComplete = false
-        } else {
-            self.closeOnRedirect = false
-            self.closeOnComplete = true
-        }
         
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
         }
     }
     
-    public func load(connectUrl: String, redirectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
-        self.closeOnRedirect = true
-        self.closeOnComplete = false
-        
-        self.connectUrl = connectUrl
-        self.redirectUrl = redirectUrl
-        self.loadedFunction = onLoaded
-        self.errorFunction = onError
-        self.closedFunction = onClosed
-        DispatchQueue.main.async {
-            self.showWebView(connectUrl: connectUrl)
-        }
-    }
-    
     public func load(connectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
-        self.closeOnRedirect = false
-        self.closeOnComplete = true
-        
         self.connectUrl = connectUrl
         self.loadedFunction = onLoaded
         self.errorFunction = onError
@@ -131,6 +97,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.willMove(toParent: nil)
         self.removeFromParent()
         self.view.removeFromSuperview()
+        
+        self.webView.navigationDelegate = nil
+        self.webView.uiDelegate = nil
+        self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
+        self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
     }
     
     func showWebView(connectUrl: String) {
@@ -169,23 +140,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             if (navigationController?.navigationBar.isHidden == false) {
                 navigationItem.title = host;
             }
-            
-            if self.redirectUrl != nil && self.closeOnRedirect {
-                if self.redirectUrl.contains(host) {
-                    decisionHandler(.cancel)
-                    self.handleConnectComplete()
-                    return
-                }
-            }
-            
-            if self.isChildWebViewLoaded && host == self.parentHost {
-                decisionHandler(.cancel)
-                self.currentHost = host
-                self.unloadChildWebView()
-                return
-            }
-            
-            self.currentHost = host
         }
         decisionHandler(.allow)
     }
@@ -204,7 +158,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     func loadChildWebView(url: URL)  {
-        self.parentHost = self.currentHost
         self.isChildWebViewLoaded = true;
         
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -229,9 +182,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             self.isChildWebViewLoaded = false
             self.childWebView.removeFromSuperview()
             self.childWebView.navigationDelegate = nil
-            self.childWebView = nil
+            self.childWebView.uiDelegate = nil
+            self.childWebView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
             
-            print("unload child web view --- eval js")
             let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
             self.webView.evaluateJavaScript(js)
         }
@@ -245,10 +198,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 }
             } else if type == self.messageTypeError {
                 self.handleConnectError(type)
-            } else if type == self.messageTypeComplete {
-                if self.closeOnComplete {
-                    self.handleConnectComplete()
-                }
+            } else if type == self.messageTypeDone {
+                self.handleConnectComplete()
+            } else if type == self.messageTypeClosePopup {
+                self.unloadChildWebView()
             }
         }
     }

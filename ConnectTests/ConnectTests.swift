@@ -30,10 +30,9 @@ class ConnectTests: XCTestCase {
     
     func testLoad() {
         let cvc = ConnectViewController()
-        cvc.load(connectUrl: "testConnectUrl", redirectUrl: "testRedirectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
         
         XCTAssertEqual("testConnectUrl", cvc.connectUrl)
-        XCTAssertEqual("testRedirectUrl", cvc.redirectUrl)
     }
     
     func testShowWebViewCalled() {
@@ -56,7 +55,7 @@ class ConnectTests: XCTestCase {
         
         cvc.showWebViewExpectation = showWebViewExpectation
         
-        cvc.load(connectUrl: "testConnectUrl", redirectUrl: "testRedirectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
         
         waitForExpectations(timeout: 1) { _ in
             XCTAssertTrue(cvc.didCallShowWebView)
@@ -67,7 +66,7 @@ class ConnectTests: XCTestCase {
     
     func testCallbacks() {
         let cvc = ConnectViewController()
-        cvc.load(connectUrl: "testConnectUrl", redirectUrl: "testRedirectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
         
         cvc.handleLoadingComplete()
         cvc.handleConnectComplete()
