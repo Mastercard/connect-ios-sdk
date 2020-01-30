@@ -18,16 +18,19 @@ class ConnectWebView: WKWebView {
 public struct ConnectViewConfig {
     public var connectUrl: String
     public var loaded: (() -> Void)!
-    public var success: (() -> Void)!
+    public var done: (() -> Void)!
+    public var cancel: (() -> Void)!
     public var error: ((String) -> Void)!
     
     public init(connectUrl: String,
          loaded: (() -> Void)? = nil,
-         success: (() -> Void)? = nil,
+         done: (() -> Void)? = nil,
+         cancel: (() -> Void)? = nil,
          error: ((String) -> Void)? = nil) {
         self.connectUrl = connectUrl
         self.loaded = loaded
-        self.success = success
+        self.done = done
+        self.cancel = cancel
         self.error = error
     }
 }
@@ -39,7 +42,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var isChildWebViewLoaded = false
     
     var loadedFunction: (() -> Void)!
-    var closedFunction: (() -> Void)!
+    var doneFunction: (() -> Void)!
+    var cancelFunction: (() -> Void)!
     var errorFunction: ((String) -> Void)!
     
     internal var connectUrl: String = ""
@@ -50,6 +54,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var messageTypeUrl = "url"
     var messageTypeError = "error"
     var messageTypeDone = "done"
+    var messageTypeCancel = "cancel"
     var messageTypeClosePopup = "closePopup"
     var defaultErrorMessage = "Connect Error"
     
@@ -76,18 +81,21 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.connectUrl = config.connectUrl
         self.loadedFunction = config.loaded
         self.errorFunction = config.error
-        self.closedFunction = config.success
+        self.doneFunction = config.done
+        self.cancelFunction = config.cancel
         
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
         }
     }
     
-    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onError: @escaping (String) -> Void, onClosed: @escaping () -> Void) {
+    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onDone: @escaping () -> Void, onCancel: @escaping () -> Void, onError: @escaping (String) -> Void) {
         self.connectUrl = connectUrl
         self.loadedFunction = onLoaded
+        self.doneFunction = onDone
+        self.cancelFunction = onCancel
         self.errorFunction = onError
-        self.closedFunction = onClosed
+        
         DispatchQueue.main.async {
             self.showWebView(connectUrl: connectUrl)
         }
@@ -200,6 +208,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.handleConnectError(type)
             } else if type == self.messageTypeDone {
                 self.handleConnectComplete()
+            } else if type == self.messageTypeCancel {
+                self.handleConnectCancel()
             } else if type == self.messageTypeClosePopup {
                 self.unloadChildWebView()
             }
@@ -213,8 +223,14 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     internal func handleConnectComplete() {
-        if self.closedFunction != nil {
-            self.closedFunction()
+        if self.doneFunction != nil {
+            self.doneFunction()
+        }
+    }
+    
+    internal func handleConnectCancel() {
+        if self.cancelFunction != nil {
+            self.cancelFunction()
         }
     }
     

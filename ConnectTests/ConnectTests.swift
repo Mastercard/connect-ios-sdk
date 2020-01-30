@@ -11,17 +11,21 @@ import XCTest
 class ConnectTests: XCTestCase {
 
     var loadedCalled = false
-    var closedCalled = false
+    var doneCalled = false
     var errorCalled = false
+    var cancelCalled = false
     var errorMessage = ""
+    var config: ConnectViewConfig! = nil
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
         self.loadedCalled = false
-        self.closedCalled = false
+        self.doneCalled = false
         self.errorCalled = false
+        self.cancelCalled = false
         self.errorMessage = ""
+        self.config = ConnectViewConfig(connectUrl: "testConnectUrl", loaded: self.dummyLoadedCallback, done: self.dummyDoneCallback, cancel: self.dummyCancelCallback, error: self.dummyErrorCallback)
     }
 
     override func tearDown() {
@@ -30,7 +34,7 @@ class ConnectTests: XCTestCase {
     
     func testLoad() {
         let cvc = ConnectViewController()
-        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(config: self.config)
         
         XCTAssertEqual("testConnectUrl", cvc.connectUrl)
     }
@@ -55,7 +59,7 @@ class ConnectTests: XCTestCase {
         
         cvc.showWebViewExpectation = showWebViewExpectation
         
-        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(config: self.config)
         
         waitForExpectations(timeout: 1) { _ in
             XCTAssertTrue(cvc.didCallShowWebView)
@@ -66,15 +70,17 @@ class ConnectTests: XCTestCase {
     
     func testCallbacks() {
         let cvc = ConnectViewController()
-        cvc.load(connectUrl: "testConnectUrl", onLoaded: self.dummyLoadedCallback, onError: self.dummyErrorCallback, onClosed: self.dummyClosedCallback)
+        cvc.load(config: self.config)
         
         cvc.handleLoadingComplete()
         cvc.handleConnectComplete()
+        cvc.handleConnectCancel()
         cvc.handleConnectError("testErrorMessage")
         
         XCTAssertTrue(self.loadedCalled)
-        XCTAssertTrue(self.closedCalled)
+        XCTAssertTrue(self.doneCalled)
         XCTAssertTrue(self.errorCalled)
+        XCTAssertTrue(self.cancelCalled)
         XCTAssertEqual("testErrorMessage", self.errorMessage)
     }
     
@@ -87,8 +93,12 @@ class ConnectTests: XCTestCase {
         self.errorMessage = msg
     }
     
-    func dummyClosedCallback() {
-        self.closedCalled = true
+    func dummyDoneCallback() {
+        self.doneCalled = true
+    }
+    
+    func dummyCancelCallback() {
+        self.cancelCalled = true
     }
 
 }
