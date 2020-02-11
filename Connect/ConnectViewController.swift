@@ -173,11 +173,13 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         var customRequest = URLRequest(url: url)
         customRequest.setValue("true", forHTTPHeaderField: "x-custom-header")
         
-        self.childWebView = ConnectWebView()
+        if (self.childWebView == nil) {
+            self.childWebView = ConnectWebView()
+        }
+        
         self.childWebView.frame = self.view.frame
         self.childWebView.navigationDelegate = self
         self.childWebView.uiDelegate = self
-        self.childWebView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
         self.childWebView.load(customRequest)
         self.childWebView.allowsBackForwardNavigationGestures = true
         
@@ -191,7 +193,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             self.childWebView.removeFromSuperview()
             self.childWebView.navigationDelegate = nil
             self.childWebView.uiDelegate = nil
-            self.childWebView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
             
             let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
             self.webView.evaluateJavaScript(js)
