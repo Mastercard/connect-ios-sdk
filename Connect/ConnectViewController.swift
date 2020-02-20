@@ -48,8 +48,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     internal var connectUrl: String = ""
     
-    var parentToolbarItems: [UIBarButtonItem]?
-    
     var messageNameConnect = "iosConnect"
     var messageTypeUrl = "url"
     var messageTypeError = "error"
@@ -61,20 +59,15 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(unloadChildWebView))
     }
     
-    override public func didMove(toParent parent: UIViewController?) {
-        self.parentToolbarItems = parent?.toolbarItems
-        
-        parent?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(unloadChildWebView))
-
-        let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
-
-        let refresh = UIBarButtonItem(barButtonSystemItem: .cancel, target: webView, action: #selector(webView.goBack))
-
-        parent?.toolbarItems = [spacer, refresh]
-        navigationController?.isToolbarHidden = true;
-        navigationController?.setNavigationBarHidden(true, animated: false);
+    override public func viewWillAppear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    override public func viewWillDisappear(_ animated: Bool) {
+        self.unload()
     }
     
     public func load(config: ConnectViewConfig) {
@@ -101,11 +94,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    public func closeAndRemove() {
-        self.willMove(toParent: nil)
-        self.removeFromParent()
-        self.view.removeFromSuperview()
-        
+    public func unload() {
         self.webView.navigationDelegate = nil
         self.webView.uiDelegate = nil
         self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
