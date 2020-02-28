@@ -6,6 +6,7 @@
 //
 
 import WebKit
+import LocalAuthentication
 
 class ConnectWebView: WKWebView {
     override var inputAccessoryView: UIView? {
@@ -56,10 +57,22 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var messageTypeClosePopup = "closePopup"
     var defaultErrorMessage = "Connect Error"
     
+    internal var hasDeviceLockVerification = false
+    internal var isJailBroken = false
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(unloadChildWebView))
+        
+        let laContext = LAContext()
+        if (laContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)) {
+            self.hasDeviceLockVerification = false;
+        } else {
+            self.hasDeviceLockVerification = true;
+        }
+        
+        self.isJailBroken = self.hasBeenJailBroken()
     }
     
     override public func viewWillAppear(_ animated: Bool) {
@@ -154,7 +167,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.handleConnectComplete()
     }
     
-    func loadChildWebView(url: URL)  {
+    func loadChildWebView(url: URL) {
         self.isChildWebViewLoaded = true;
         
         navigationController?.setNavigationBarHidden(false, animated: true)
@@ -175,7 +188,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.view.addSubview(self.childWebView)
     }
     
-    @objc func unloadChildWebView(){
+    @objc func unloadChildWebView() {
         if ((self.childWebView) != nil) {
             navigationController?.setNavigationBarHidden(true, animated: true);
             self.isChildWebViewLoaded = false
@@ -228,5 +241,14 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         if self.errorFunction != nil {
             self.errorFunction(msg ?? self.defaultErrorMessage)
         }
+    }
+    
+    internal func hasBeenJailBroken() -> Bool {
+        let fm = FileManager()
+        if (fm.fileExists(atPath: "Applications/Cydia.app") || fm.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib")) {
+            return true
+        }
+        
+        return false
     }
 }

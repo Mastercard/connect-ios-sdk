@@ -30,6 +30,13 @@ class ConnectTests: XCTestCase {
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
+        
+        self.loadedCalled = false
+        self.doneCalled = false
+        self.errorCalled = false
+        self.cancelCalled = false
+        self.errorMessage = ""
+        self.config = nil
     }
     
     func testLoad() {
@@ -82,6 +89,11 @@ class ConnectTests: XCTestCase {
         XCTAssertTrue(self.errorCalled)
         XCTAssertTrue(self.cancelCalled)
         XCTAssertEqual("testErrorMessage", self.errorMessage)
+    }
+    
+    func testJailBreakCheck() {
+        let cvc = ConnectViewController()
+        XCTAssertFalse(cvc.hasBeenJailBroken())
     }
     
     func dummyLoadedCallback() {
