@@ -114,6 +114,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
     }
     
+    public func close() {
+        self.navigationController?.dismiss(animated: false)
+    }
+    
     func showWebView(connectUrl: String) {
         if let url = URL(string: connectUrl) {
             if (self.webView == nil) {
@@ -226,18 +230,21 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     internal func handleConnectComplete() {
+        self.close()
         if self.doneFunction != nil {
             self.doneFunction()
         }
     }
     
     internal func handleConnectCancel() {
+        self.close()
         if self.cancelFunction != nil {
             self.cancelFunction()
         }
     }
     
     internal func handleConnectError(_ msg: String?) {
+        self.close()
         if self.errorFunction != nil {
             self.errorFunction(msg ?? self.defaultErrorMessage)
         }
