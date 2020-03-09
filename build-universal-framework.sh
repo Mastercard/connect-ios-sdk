@@ -2,13 +2,13 @@
 # create folder where we place built frameworks
 mkdir build
 # build framework for simulators
-xcodebuild clean build   -project Connect.xcodeproj   -scheme Connect   -configuration Release   -sdk iphonesimulator   -derivedDataPath derived_data
+xcodebuild clean build   -project Connect.xcodeproj   -scheme Connect   -configuration Release   -sdk iphonesimulator   -derivedDataPath derived_data -xcconfig Config.xcconfig
 # create folder to store compiled framework for simulator
 mkdir build/simulator
 # copy compiled framework for simulator into our build folder
 cp -r derived_data/Build/Products/Release-iphonesimulator/Connect.framework build/simulator
 #build framework for devices
-xcodebuild clean build   -project Connect.xcodeproj   -scheme Connect   -configuration Release   -sdk iphoneos   -derivedDataPath derived_data
+xcodebuild clean build   -project Connect.xcodeproj   -scheme Connect   -configuration Release   -sdk iphoneos   -derivedDataPath derived_data -xcconfig Config.xcconfig
 # create folder to store compiled framework for simulator
 mkdir build/devices
 # copy compiled framework for simulator into our build folder
