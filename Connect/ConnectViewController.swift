@@ -110,8 +110,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     public func unload() {
         self.webView.navigationDelegate = nil
         self.webView.uiDelegate = nil
-        self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
-        self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
+        if ((self.viewIfLoaded) != nil) {
+            self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
+            self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
+        }
     }
     
     public func close() {
