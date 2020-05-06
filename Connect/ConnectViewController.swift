@@ -60,6 +60,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     internal var hasDeviceLockVerification = false
     internal var isJailBroken = false
     
+    var observersAdded = false
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -110,9 +112,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     public func unload() {
         self.webView.navigationDelegate = nil
         self.webView.uiDelegate = nil
-        if ((self.viewIfLoaded) != nil) {
+        if ((self.viewIfLoaded) != nil && self.observersAdded) {
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
+            self.observersAdded = false
         }
     }
     
@@ -132,8 +135,12 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.webView.frame = self.view.frame
                 self.webView.navigationDelegate = self
                 self.webView.uiDelegate = self
+            }
+            
+            if (!self.observersAdded) {
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
+                self.observersAdded = true
             }
             
             self.webView.load(URLRequest(url: url))
