@@ -60,7 +60,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     internal var hasDeviceLockVerification = false
     internal var isJailBroken = false
     
-    var observersAdded = false
+    var removeObserver = false
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -110,16 +110,17 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func unload() {
-        self.webView.navigationDelegate = nil
-        self.webView.uiDelegate = nil
-        if ((self.viewIfLoaded) != nil && self.observersAdded) {
+        if (self.removeObserver) {
+            self.webView.navigationDelegate = nil
+            self.webView.uiDelegate = nil
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
-            self.observersAdded = false
+            self.removeObserver = false
         }
     }
     
     public func close() {
+        self.removeObserver = true;
         self.navigationController?.dismiss(animated: false)
     }
     
@@ -137,11 +138,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.webView.uiDelegate = self
             }
             
-            if (!self.observersAdded) {
+          
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
-                self.observersAdded = true
-            }
+                self.removeObserver = false
+            
             
             self.webView.load(URLRequest(url: url))
             self.webView.allowsBackForwardNavigationGestures = true
