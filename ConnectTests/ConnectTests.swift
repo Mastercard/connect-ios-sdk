@@ -14,7 +14,7 @@ class ConnectTests: XCTestCase {
     var doneCalled = false
     var errorCalled = false
     var cancelCalled = false
-    var errorMessage = ""
+    var errorMessage: NSDictionary! = nil
     var config: ConnectViewConfig! = nil
     
     override func setUp() {
@@ -24,7 +24,7 @@ class ConnectTests: XCTestCase {
         self.doneCalled = false
         self.errorCalled = false
         self.cancelCalled = false
-        self.errorMessage = ""
+        self.errorMessage = nil
         self.config = ConnectViewConfig(connectUrl: "testConnectUrl", loaded: self.dummyLoadedCallback, done: self.dummyDoneCallback, cancel: self.dummyCancelCallback, error: self.dummyErrorCallback)
     }
 
@@ -35,7 +35,7 @@ class ConnectTests: XCTestCase {
         self.doneCalled = false
         self.errorCalled = false
         self.cancelCalled = false
-        self.errorMessage = ""
+        self.errorMessage = nil
         self.config = nil
     }
     
@@ -80,15 +80,15 @@ class ConnectTests: XCTestCase {
         cvc.load(config: self.config)
         
         cvc.handleLoadingComplete()
-        cvc.handleConnectComplete()
+        cvc.handleConnectComplete(nil)
         cvc.handleConnectCancel()
-        cvc.handleConnectError("testErrorMessage")
+        cvc.handleConnectError(nil)
         
         XCTAssertTrue(self.loadedCalled)
         XCTAssertTrue(self.doneCalled)
         XCTAssertTrue(self.errorCalled)
         XCTAssertTrue(self.cancelCalled)
-        XCTAssertEqual("testErrorMessage", self.errorMessage)
+        XCTAssertEqual(nil, self.errorMessage)
     }
     
     func testJailBreakCheck() {
@@ -100,12 +100,12 @@ class ConnectTests: XCTestCase {
         self.loadedCalled = true
     }
     
-    func dummyErrorCallback(_ msg: String) {
+    func dummyErrorCallback(_ data: NSDictionary?) {
         self.errorCalled = true
-        self.errorMessage = msg
+        self.errorMessage = data
     }
     
-    func dummyDoneCallback() {
+    func dummyDoneCallback(_ data: NSDictionary?) {
         self.doneCalled = true
     }
     

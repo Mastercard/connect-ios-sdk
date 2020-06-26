@@ -19,15 +19,15 @@ class ConnectWebView: WKWebView {
 public struct ConnectViewConfig {
     public var connectUrl: String
     public var loaded: (() -> Void)!
-    public var done: (() -> Void)!
+    public var done: ((NSDictionary?) -> Void)!
     public var cancel: (() -> Void)!
-    public var error: ((String) -> Void)!
+    public var error: ((NSDictionary?) -> Void)!
     
     public init(connectUrl: String,
          loaded: (() -> Void)? = nil,
-         done: (() -> Void)? = nil,
+         done: ((NSDictionary?) -> Void)? = nil,
          cancel: (() -> Void)? = nil,
-         error: ((String) -> Void)? = nil) {
+         error: ((NSDictionary?) -> Void)? = nil) {
         self.connectUrl = connectUrl
         self.loaded = loaded
         self.done = done
@@ -43,9 +43,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var isChildWebViewLoaded = false
     
     var loadedFunction: (() -> Void)!
-    var doneFunction: (() -> Void)!
+    var doneFunction: ((NSDictionary?) -> Void)!
     var cancelFunction: (() -> Void)!
-    var errorFunction: ((String) -> Void)!
+    var errorFunction: ((NSDictionary?) -> Void)!
     
     internal var connectUrl: String = ""
     
@@ -97,7 +97,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onDone: @escaping () -> Void, onCancel: @escaping () -> Void, onError: @escaping (String) -> Void) {
+    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onDone: @escaping (NSDictionary?) -> Void, onCancel: @escaping () -> Void, onError: @escaping (NSDictionary?) -> Void) {
         self.connectUrl = connectUrl
         self.loadedFunction = onLoaded
         self.doneFunction = onDone
@@ -178,7 +178,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func webViewDidClose(_ webView: WKWebView) {
-        self.handleConnectComplete()
+        self.handleConnectComplete(nil)
     }
     
     func loadChildWebView(url: URL) {
@@ -222,9 +222,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                     self.loadChildWebView(url: url)
                 }
             } else if type == self.messageTypeError {
-                self.handleConnectError(type)
+                self.handleConnectError(messageBody)
             } else if type == self.messageTypeDone {
-                self.handleConnectComplete()
+                self.handleConnectComplete(messageBody)
             } else if type == self.messageTypeCancel {
                 self.handleConnectCancel()
             } else if type == self.messageTypeClosePopup {
@@ -239,10 +239,17 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    internal func handleConnectComplete() {
+    internal func handleConnectComplete(_ message: [String: Any]?) {
         self.close()
         if self.doneFunction != nil {
-            self.doneFunction()
+            if let data = message?["data"] as? NSDictionary {
+                self.doneFunction(data)
+            } else if let query = message?["query"] as? NSDictionary {
+                self.doneFunction(query)
+            } else {
+                self.doneFunction(nil)
+            }
+            
         }
     }
     
@@ -253,10 +260,16 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    internal func handleConnectError(_ msg: String?) {
+    internal func handleConnectError(_ message: [String: Any]?) {
         self.close()
         if self.errorFunction != nil {
-            self.errorFunction(msg ?? self.defaultErrorMessage)
+            if let data = message?["data"] as? NSDictionary {
+                self.errorFunction(data)
+            } else if let query = message?["query"] as? NSDictionary {
+                self.errorFunction(query)
+            } else {
+                self.errorFunction(nil)
+            }
         }
     }
     
