@@ -22,17 +22,23 @@ public struct ConnectViewConfig {
     public var done: ((NSDictionary?) -> Void)!
     public var cancel: (() -> Void)!
     public var error: ((NSDictionary?) -> Void)!
+    public var route: ((NSDictionary?) -> Void)!
+    public var user: ((NSDictionary?) -> Void)!
     
     public init(connectUrl: String,
          loaded: (() -> Void)? = nil,
          done: ((NSDictionary?) -> Void)? = nil,
          cancel: (() -> Void)? = nil,
-         error: ((NSDictionary?) -> Void)? = nil) {
+         error: ((NSDictionary?) -> Void)? = nil,
+         route: ((NSDictionary?) -> Void)? = nil,
+         userEvent: ((NSDictionary?) -> Void)? = nil) {
         self.connectUrl = connectUrl
         self.loaded = loaded
         self.done = done
         self.cancel = cancel
         self.error = error
+        self.route = route
+        self.user = userEvent
     }
 }
 
@@ -46,6 +52,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var doneFunction: ((NSDictionary?) -> Void)!
     var cancelFunction: (() -> Void)!
     var errorFunction: ((NSDictionary?) -> Void)!
+    var routeFunction: ((NSDictionary?) -> Void)!
+    var userFunction: ((NSDictionary?) -> Void)!
+
     
     internal var connectUrl: String = ""
     
@@ -55,6 +64,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var messageTypeDone = "done"
     var messageTypeCancel = "cancel"
     var messageTypeClosePopup = "closePopup"
+    var messageTypeRoute = "route"
+    var messageTypeUser = "user"
     var defaultErrorMessage = "Connect Error"
     
     internal var hasDeviceLockVerification = false
@@ -91,6 +102,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.errorFunction = config.error
         self.doneFunction = config.done
         self.cancelFunction = config.cancel
+        self.routeFunction = config.route
+        self.userFunction = config.user
         
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
@@ -229,6 +242,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.handleConnectCancel()
             } else if type == self.messageTypeClosePopup {
                 self.unloadChildWebView()
+            } else if type == self.messageTypeRoute {
+                self.handleConnectRoute(messageBody)
+            } else if type == self.messageTypeUser {
+                self.handleConnectUser(messageBody)
             }
         }
     }
@@ -269,6 +286,30 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.errorFunction(query)
             } else {
                 self.errorFunction(nil)
+            }
+        }
+    }
+    
+    internal func handleConnectRoute(_ message: [String: Any]?) {
+        if self.routeFunction != nil {
+            if let data = message?["data"] as? NSDictionary {
+                self.routeFunction(data)
+            } else if let query = message?["query"] as? NSDictionary {
+                self.routeFunction(query)
+            } else {
+                self.routeFunction(nil)
+            }
+        }
+    }
+    
+    internal func handleConnectUser(_ message: [String: Any]?) {
+        if self.userFunction != nil {
+            if let data = message?["data"] as? NSDictionary {
+                self.userFunction(data)
+            } else if let query = message?["query"] as? NSDictionary {
+                self.userFunction(query)
+            } else {
+                self.userFunction(nil)
             }
         }
     }
