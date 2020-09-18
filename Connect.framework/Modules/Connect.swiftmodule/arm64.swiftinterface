@@ -1,0 +1,34 @@
+// swift-interface-format-version: 1.0
+// swift-compiler-version: Apple Swift version 5.1.3 (swiftlang-1100.0.282.1 clang-1100.0.33.15)
+// swift-module-flags: -target arm64-apple-ios11.0 -enable-objc-interop -enable-library-evolution -swift-version 5 -enforce-exclusivity=checked -O -module-name Connect
+@_exported import Connect
+import LocalAuthentication
+import Swift
+import WebKit
+public struct ConnectViewConfig {
+  public var connectUrl: Swift.String
+  public var loaded: (() -> Swift.Void)!
+  public var done: ((Foundation.NSDictionary?) -> Swift.Void)!
+  public var cancel: (() -> Swift.Void)!
+  public var error: ((Foundation.NSDictionary?) -> Swift.Void)!
+  public var route: ((Foundation.NSDictionary?) -> Swift.Void)!
+  public var user: ((Foundation.NSDictionary?) -> Swift.Void)!
+  public init(connectUrl: Swift.String, loaded: (() -> Swift.Void)? = nil, done: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, cancel: (() -> Swift.Void)? = nil, error: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, route: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, userEvent: ((Foundation.NSDictionary?) -> Swift.Void)? = nil)
+}
+@objc public class ConnectViewController : UIKit.UIViewController, WebKit.WKNavigationDelegate, WebKit.WKUIDelegate, WebKit.WKScriptMessageHandler {
+  @objc override dynamic public func viewDidLoad()
+  @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
+  @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
+  public func load(config: Connect.ConnectViewConfig)
+  public func load(connectUrl: Swift.String, onLoaded: @escaping () -> Swift.Void, onDone: @escaping (Foundation.NSDictionary?) -> Swift.Void, onCancel: @escaping () -> Swift.Void, onError: @escaping (Foundation.NSDictionary?) -> Swift.Void)
+  public func unload()
+  public func close()
+  @objc override dynamic public func observeValue(forKeyPath keyPath: Swift.String?, of object: Any?, change: [Foundation.NSKeyValueChangeKey : Any]?, context: Swift.UnsafeMutableRawPointer?)
+  @objc public func webView(_ webView: WebKit.WKWebView, decidePolicyFor navigationAction: WebKit.WKNavigationAction, decisionHandler: @escaping (WebKit.WKNavigationActionPolicy) -> Swift.Void)
+  @objc public func webView(_ webView: WebKit.WKWebView, createWebViewWith configuration: WebKit.WKWebViewConfiguration, for navigationAction: WebKit.WKNavigationAction, windowFeatures: WebKit.WKWindowFeatures) -> WebKit.WKWebView?
+  @objc public func webViewDidClose(_ webView: WebKit.WKWebView)
+  @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
+  @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
+  @objc required dynamic public init?(coder: Foundation.NSCoder)
+  @objc deinit
+}
