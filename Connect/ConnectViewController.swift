@@ -7,6 +7,7 @@
 
 import WebKit
 import LocalAuthentication
+import SafariServices
 
 class ConnectWebView: WKWebView {
     override var inputAccessoryView: UIView? {
@@ -42,9 +43,9 @@ public struct ConnectViewConfig {
     }
 }
 
-public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler {
+public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     var webView: ConnectWebView!
-    var childWebView: ConnectWebView!
+    var childWebView: SFSafariViewController!
     var isWebViewLoaded = false
     var isChildWebViewLoaded = false
     
@@ -183,7 +184,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
         // TODO: When would this happen? - Not during OAuth
-        print("Loading ChildWebView from non-standard location")
+        // print("Loading ChildWebView from non-standard location")
         if navigationAction.targetFrame == nil {
             self.loadChildWebView(url: (navigationAction.request.url)!)
         }
@@ -194,38 +195,33 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.handleConnectComplete(nil)
     }
     
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+
+        if self.isChildWebViewLoaded {
+            self.postWindowClosedMessage()
+        }
+    }
+    
     func loadChildWebView(url: URL) {
         self.isChildWebViewLoaded = true;
-        
-        navigationController?.setNavigationBarHidden(false, animated: true)
-        
-        var customRequest = URLRequest(url: url)
-        customRequest.setValue("true", forHTTPHeaderField: "x-custom-header")
-        
-        if (self.childWebView == nil) {
-            self.childWebView = ConnectWebView()
-        }
-        
-        self.childWebView.frame = self.view.frame
-        self.childWebView.navigationDelegate = self
-        self.childWebView.uiDelegate = self
-        self.childWebView.load(customRequest)
-        self.childWebView.allowsBackForwardNavigationGestures = true
-        
-        self.view.addSubview(self.childWebView)
+        self.childWebView = SFSafariViewController(url: url);
+        self.childWebView.delegate = self;
+        present(self.childWebView, animated: true, completion: nil);
     }
     
     @objc func unloadChildWebView() {
-        if ((self.childWebView) != nil) {
+        if ((self.childWebView) != nil && self.isChildWebViewLoaded) {
             navigationController?.setNavigationBarHidden(true, animated: true);
-            self.isChildWebViewLoaded = false
-            self.childWebView.removeFromSuperview()
-            self.childWebView.navigationDelegate = nil
-            self.childWebView.uiDelegate = nil
-            
-            let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
-            self.webView.evaluateJavaScript(js)
+            childWebView.dismiss(animated: true, completion: nil);
+            self.postWindowClosedMessage()
         }
+    }
+    
+    func postWindowClosedMessage() {
+        let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
+        self.webView.evaluateJavaScript(js)
+        self.isChildWebViewLoaded = false;
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
