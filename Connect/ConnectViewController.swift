@@ -15,6 +15,14 @@ class ConnectWebView: WKWebView {
         // does not appear when forms are focused.
         return nil
     }
+    override var safeAreaInsets: UIEdgeInsets {
+        if #available(iOS 11.0, *) {
+            let insects = super.safeAreaInsets
+            return UIEdgeInsets(top: insects.top, left: insects.left, bottom: 0, right: insects.right)
+        } else {
+            return .zero
+        }
+    }
 }
 
 public struct ConnectViewConfig {
@@ -147,6 +155,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 config.userContentController = userContentController
                 
                 self.webView = ConnectWebView(frame: .zero, configuration: config)
+                self.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.webView.frame = self.view.frame
                 self.webView.navigationDelegate = self
                 self.webView.uiDelegate = self
