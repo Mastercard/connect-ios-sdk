@@ -41,7 +41,7 @@ class ConnectTests: XCTestCase {
     
     func testVersionString() {
         let version = sdkVersion()
-        XCTAssertEqual("1.2.1", version)
+        XCTAssertEqual("1.3.0", version)
     }
     
     func testLoad() {
