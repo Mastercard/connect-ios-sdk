@@ -21,6 +21,7 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		212CDB172565CB9700118601 /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212CDB162565CB9700118601 /* Version.swift */; };
 		6B94CDE423A819F30077D65A /* Connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94CDDA23A819F20077D65A /* Connect.framework */; };
 		6B94CDE923A819F30077D65A /* ConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B94CDE823A819F30077D65A /* ConnectTests.swift */; };
 		6B94CDEB23A819F30077D65A /* Connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B94CDDD23A819F20077D65A /* Connect.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -38,6 +39,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		212CDB162565CB9700118601 /* Version.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Version.swift; sourceTree = "<group>"; };
 		6B94CDDA23A819F20077D65A /* Connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B94CDDD23A819F20077D65A /* Connect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connect.h; sourceTree = "<group>"; };
 		6B94CDDE23A819F20077D65A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				6B94CDDD23A819F20077D65A /* Connect.h */,
 				6B94CDDE23A819F20077D65A /* Info.plist */,
 				6B94CDF723A81AA50077D65A /* ConnectViewController.swift */,
+				212CDB162565CB9700118601 /* Version.swift */,
 			);
 			path = Connect;
 			sourceTree = "<group>";
@@ -240,6 +243,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				212CDB172565CB9700118601 /* Version.swift in Sources */,
 				6B94CDF823A81AA50077D65A /* ConnectViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -411,7 +415,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3.0;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
@@ -443,7 +447,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.3.0;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

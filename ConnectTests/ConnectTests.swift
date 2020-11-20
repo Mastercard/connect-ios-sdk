@@ -39,6 +39,11 @@ class ConnectTests: XCTestCase {
         self.config = nil
     }
     
+    func testVersionString() {
+        let version = sdkVersion()
+        XCTAssertEqual("1.3.0", version)
+    }
+    
     func testLoad() {
         let cvc = ConnectViewController()
         cvc.load(config: self.config)
