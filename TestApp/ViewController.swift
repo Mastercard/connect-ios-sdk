@@ -7,8 +7,6 @@
 //
 
 import UIKit
-import Connect
-
 
 class ViewController: UIViewController {
     
