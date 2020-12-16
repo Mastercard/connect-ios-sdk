@@ -24,7 +24,7 @@ class TestAppUITests: XCTestCase {
     }
     
     // Before running Unit Tests use Postman to generate a Connect 2.0 URL and place URL inside generateUrl double quotes below.
-    let generatedUrl = ""
+    let generatedUrl = "https://connect2.finicity.com?consumerId=1c3376337336b5c22decd38fd3179779&customerId=1017116410&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=e350ec0c94a0427297c8079081e8630808da3d00241766f06c52514ff3926fc4&timestamp=1608157760074&ttl=1608164960074"
     
     let badExpiredUrl = "https://connect2.finicity.com?consumerId=dbceec20d8b97174e6aed204856f5a55&customerId=1016927519&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=abb1762e5c640f02823c56332daede3fe2f2143f4f5b8be6ec178ac72d7dbc5a&timestamp=1607806595887&ttl=1607813795887"
     
@@ -140,6 +140,23 @@ class TestAppUITests: XCTestCase {
         XCTAssert(webViewsQuery.buttons["Continue"].waitForExistence(timeout: 5))
         XCTAssert(webViewsQuery.staticTexts["Privacy Policy"].waitForExistence(timeout: 5))
         webViewsQuery.staticTexts["Privacy Policy"].tap()
+        
+        let doneButton = app.buttons["Done"]
+        XCTAssert(doneButton.waitForExistence(timeout: 5))
+        doneButton.tap()
+    }
+    
+    func test07WindowOpen() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.textFields[AccessiblityIdentifer.UrlTextField.rawValue].typeText("https://pick3pro.com/TestOpenWin.html")
+        app.buttons[AccessiblityIdentifer.ConnectButton.rawValue].tap()
+        
+        let webViewsQuery = app.webViews.webViews.webViews
+        XCTAssert(webViewsQuery.buttons["Open Window"].waitForExistence(timeout: 5))
+        webViewsQuery.buttons["Open Window"].tap()
         
         let doneButton = app.buttons["Done"]
         XCTAssert(doneButton.waitForExistence(timeout: 5))
