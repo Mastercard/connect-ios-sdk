@@ -23,7 +23,8 @@ class TestAppUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    let generatedUrl = "https://connect2.finicity.com?consumerId=2cdd5ee6eb253ac9900a583e5c5f6676&customerId=1017061095&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=97fe83ab3c8a4a96a68b1a1ef771e6f9b01689ab07c61a6141958e985a6d5a5c&timestamp=1608066324218&ttl=1608073524218"
+    // Before running Unit Tests use Postman to generate a Connect 2.0 URL and place URL inside generateUrl double quotes below.
+    let generatedUrl = ""
     
     let badExpiredUrl = "https://connect2.finicity.com?consumerId=dbceec20d8b97174e6aed204856f5a55&customerId=1016927519&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=abb1762e5c640f02823c56332daede3fe2f2143f4f5b8be6ec178ac72d7dbc5a&timestamp=1607806595887&ttl=1607813795887"
     
