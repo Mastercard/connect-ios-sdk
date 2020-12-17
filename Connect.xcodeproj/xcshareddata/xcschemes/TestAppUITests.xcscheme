@@ -35,6 +35,23 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
+      <BuildableProductRunnable
+         runnableDebuggingMode = "0">
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "213423482583F6D200C06BB8"
+            BuildableName = "TestApp.app"
+            BlueprintName = "TestApp"
+            ReferencedContainer = "container:Connect.xcodeproj">
+         </BuildableReference>
+      </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "CONNECT_URL"
+            value = "$(CONNECT_URL)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -42,6 +59,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "213423482583F6D200C06BB8"
+            BuildableName = "TestApp.app"
+            BlueprintName = "TestApp"
+            ReferencedContainer = "container:Connect.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
