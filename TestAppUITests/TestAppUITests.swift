@@ -13,7 +13,7 @@ class TestAppUITests: XCTestCase {
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
         
-        if let connectUrl = ProcessInfo.processInfo.environment["CONNECT_URL"] {
+        if let connectUrl = ProcessInfo.processInfo.environment["CONNECT_URL"], connectUrl.count > 0 {
             generatedUrl = connectUrl
         }
 
@@ -105,7 +105,7 @@ class TestAppUITests: XCTestCase {
         app.buttons[AccessiblityIdentifer.ConnectButton.rawValue].tap()
 
         let webViewsQuery = app.webViews.webViews.webViews
-        XCTAssert(webViewsQuery.textFields["Search for your bank"].waitForExistence(timeout: 5))
+        XCTAssert(webViewsQuery.textFields["Search for your bank"].waitForExistence(timeout: 10))
         webViewsQuery.textFields["Search for your bank"].tap()
         webViewsQuery.textFields["Search for your bank"].typeText("finbank")
         XCTAssert(webViewsQuery.staticTexts["FinBank"].waitForExistence(timeout: 5))
@@ -119,12 +119,13 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.secureTextFields["Banking Password"].tap()
         webViewsQuery.secureTextFields["Banking Password"].typeText("go")
         webViewsQuery.buttons[" Secure sign in"].tap()
+        XCTAssert(webViewsQuery.staticTexts["Eligible accounts"].waitForExistence(timeout: 5))
         webViewsQuery.otherElements["institution container"].children(matching: .other).element(boundBy: 2).switches["Account Checkbox"].tap()
         webViewsQuery.staticTexts["Savings"].swipeUp()
         XCTAssert(webViewsQuery.buttons["Save"].waitForExistence(timeout: 5))
         webViewsQuery.buttons["Save"].tap()
-        XCTAssert(webViewsQuery.buttons["Submit accounts"].waitForExistence(timeout: 5))
-        webViewsQuery.buttons["Submit accounts"].tap()
+        XCTAssert(webViewsQuery.buttons["Submit"].waitForExistence(timeout: 5))
+        webViewsQuery.buttons["Submit"].tap()
     }
     
     func test06SafariViewController() throws {
