@@ -689,7 +689,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.3.1;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
@@ -721,7 +721,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.0;
+				MARKETING_VERSION = 1.3.1;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
