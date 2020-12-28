@@ -82,6 +82,13 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     var removeObserver = false
     
+    deinit {
+        print("ConnectViewController - deallocated")
+        // Some squirrly hack to get rid of assertions showing up in console when deallocating.
+        let newView = UIView()
+        newView.addSubview(webView)
+    }
+    
     override public func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -137,6 +144,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
             self.webView.uiDelegate = nil
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.title))
+            self.webView.configuration.userContentController.removeScriptMessageHandler(forName: messageNameConnect)
             self.removeObserver = false
         }
     }
@@ -157,19 +165,16 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.webView = ConnectWebView(frame: .zero, configuration: config)
                 self.webView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
                 self.webView.frame = self.view.frame
+                self.view.addSubview(self.webView)
+                self.webView.allowsBackForwardNavigationGestures = true
                 self.webView.navigationDelegate = self
                 self.webView.uiDelegate = self
-            }
-            
-          
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
                 self.webView.addObserver(self, forKeyPath: #keyPath(WKWebView.title), options: .new, context: nil)
                 self.removeObserver = false
-            
+            }
             
             self.webView.load(URLRequest(url: url))
-            self.webView.allowsBackForwardNavigationGestures = true
-            self.view.addSubview(self.webView)
         }
     }
     
