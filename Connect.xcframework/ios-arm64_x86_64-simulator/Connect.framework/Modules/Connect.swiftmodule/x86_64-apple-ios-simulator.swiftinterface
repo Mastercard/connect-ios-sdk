@@ -19,6 +19,7 @@ public struct ConnectViewConfig {
   public init(connectUrl: Swift.String, loaded: (() -> Swift.Void)? = nil, done: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, cancel: (() -> Swift.Void)? = nil, error: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, route: ((Foundation.NSDictionary?) -> Swift.Void)? = nil, userEvent: ((Foundation.NSDictionary?) -> Swift.Void)? = nil)
 }
 @objc @_inheritsConvenienceInitializers public class ConnectViewController : UIKit.UIViewController, WebKit.WKNavigationDelegate, WebKit.WKUIDelegate, WebKit.WKScriptMessageHandler, SafariServices.SFSafariViewControllerDelegate {
+  @objc deinit
   @objc override dynamic public func viewDidLoad()
   @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
@@ -32,7 +33,6 @@ public struct ConnectViewConfig {
   @objc public func webViewDidClose(_ webView: WebKit.WKWebView)
   @objc public func safariViewControllerDidFinish(_ controller: SafariServices.SFSafariViewController)
   @objc public func userContentController(_ userContentController: WebKit.WKUserContentController, didReceive message: WebKit.WKScriptMessage)
-  @objc deinit
   @objc override dynamic public init(nibName nibNameOrNil: Swift.String?, bundle nibBundleOrNil: Foundation.Bundle?)
   @objc required dynamic public init?(coder: Foundation.NSCoder)
 }
