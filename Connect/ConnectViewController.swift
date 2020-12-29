@@ -85,8 +85,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     deinit {
         print("ConnectViewController - deallocated")
         // Some squirrly hack to get rid of assertions showing up in console when deallocating.
-        let newView = UIView()
-        newView.addSubview(webView)
+        if webView != nil {
+            let newView = UIView()
+            newView.addSubview(webView)
+        }
     }
     
     override public func viewDidLoad() {
