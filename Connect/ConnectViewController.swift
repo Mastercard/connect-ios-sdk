@@ -272,16 +272,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    internal func sendVersionInfoToWebview() {
-        // Create dictionary with version info
-        let data = ["type":"sdkVersion","version":sdkVersion(),"os":"iOS"]
-        let serializedData = try! JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
-        let encodedData = serializedData.base64EncodedString(options: .endLineWithLineFeed)
-        if webView != nil {
-            webView.evaluateJavaScript("getSdkVersionInfo('\(encodedData)')", completionHandler: nil)
-        }
-    }
-    
     internal func handleLoadingComplete() {
         if self.loadedFunction != nil {
             self.loadedFunction()
