@@ -56,6 +56,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var childWebView: SFSafariViewController!
     var isWebViewLoaded = false
     var isChildWebViewLoaded = false
+    var pingTimer: Timer?
     
     var loadedFunction: (() -> Void)!
     var doneFunction: ((NSDictionary?) -> Void)!
@@ -75,6 +76,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var messageTypeClosePopup = "closePopup"
     var messageTypeRoute = "route"
     var messageTypeUser = "user"
+    var messageTypeAck = "ack"
     var defaultErrorMessage = "Connect Error"
     
     internal var hasDeviceLockVerification = false
@@ -103,6 +105,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     override public func viewWillDisappear(_ animated: Bool) {
         self.unload()
+        stopPingTimer()
     }
     
     public func load(config: ConnectViewConfig) {
@@ -142,6 +145,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func close() {
+        stopPingTimer()
         self.removeObserver = true;
         self.navigationController?.dismiss(animated: false)
     }
@@ -233,6 +237,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.isChildWebViewLoaded = false;
     }
     
+    @objc func pingConnect() {
+        let js = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())' }, '\(self.connectUrl)')"
+        self.webView.evaluateJavaScript(js)
+    }
+    
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let messageBody = message.body as? [String: Any], let type = messageBody["type"] as? String {
             if type == self.messageTypeUrl, let urlString = messageBody["url"] as? String {
@@ -251,17 +260,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.handleConnectRoute(messageBody)
             } else if type == self.messageTypeUser {
                 self.handleConnectUser(messageBody)
+            } else if type == self.messageTypeAck {
+                stopPingTimer()
             }
-        }
-    }
-    
-    internal func sendVersionInfoToWebview() {
-        // Create dictionary with version info
-        let data = ["type":"sdkVersion","version":sdkVersion(),"os":"iOS"]
-        let serializedData = try! JSONSerialization.data(withJSONObject: data, options: .prettyPrinted)
-        let encodedData = serializedData.base64EncodedString(options: .endLineWithLineFeed)
-        if webView != nil {
-            webView.evaluateJavaScript("getSdkVersionInfo('\(encodedData)')", completionHandler: nil)
         }
     }
     
@@ -269,7 +270,22 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         if self.loadedFunction != nil {
             self.loadedFunction()
         }
-        sendVersionInfoToWebview()
+        startPingTimer()
+    }
+    
+    internal func startPingTimer() {
+        if pingTimer != nil {
+            pingTimer?.invalidate()
+            pingTimer = nil
+        }
+        pingTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(pingConnect), userInfo: nil, repeats: true)
+    }
+    
+    internal func stopPingTimer() {
+        if pingTimer != nil {
+            pingTimer?.invalidate()
+            pingTimer = nil
+        }
     }
     
     internal func handleConnectComplete(_ message: [String: Any]?) {
