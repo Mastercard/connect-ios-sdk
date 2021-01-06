@@ -167,5 +167,43 @@ class TestAppUITests: XCTestCase {
         XCTAssert(doneButton.waitForExistence(timeout: 5))
         doneButton.tap()
     }
+    
+    func test08SendVersionInfoToWebview() throws {
+        // UI tests must launch the application that they test.
+        let app = XCUIApplication()
+        app.launch()
+        
+        app.textFields[AccessiblityIdentifer.UrlTextField.rawValue].typeText("https://pick3pro.com/TestSendData.html")
+        app.buttons[AccessiblityIdentifer.ConnectButton.rawValue].tap()
+        
+        // Wait for web form
+        XCTAssert(app.staticTexts["Datatype:"].waitForExistence(timeout: 5))
+        let webViewsQuery = app.webViews.webViews.webViews
+        
+        // Get the textfields in the webview
+        let textFields = webViewsQuery.descendants(matching: .textField)
+        
+        // Verify type is sdkVersion
+        if let dataTypeStr = textFields.element(boundBy: 0).value as? String {
+            XCTAssertEqual(dataTypeStr, "sdkVersion")
+        } else {
+            XCTFail("Did not find dataType text field")
+        }
+
+        // Verify version is 1.3.1
+        if let versionStr = textFields.element(boundBy: 1).value as? String {
+            XCTAssertEqual(versionStr, "1.3.1")
+        } else {
+            XCTFail("Did not find version text field")
+        }
+        
+        // Verify OS is iOS
+        if let osStr = textFields.element(boundBy: 2).value as? String {
+            XCTAssertEqual(osStr, "iOS")
+        } else {
+            XCTFail("Did not find version text field")
+        }
+
+    }
 
 }

@@ -45,7 +45,7 @@ class ConnectTests: XCTestCase {
     
     func testVersionString() {
         let version = sdkVersion()
-        XCTAssertEqual("1.3.0", version)
+        XCTAssertEqual("1.3.1", version)
     }
     
     func testLoad() {
@@ -66,16 +66,22 @@ class ConnectTests: XCTestCase {
         }
     }
     
-//    func testErrorCallback() {
-//        self.errorExp = expectation(description: "Error callback")
-//        let cvc = ConnectViewController()
-//        cvc.load(config: self.config)
-//
-//        waitForExpectations(timeout: 10) { _ in
-//            XCTAssertTrue(self.errorCalled)
-//            XCTAssertNotEqual(nil, self.errorMessage)
-//        }
-//    }
+    func testMemoryLeak() {
+        self.loadedExp = expectation(description: "Loaded callback")
+        let cvc = ConnectViewController()
+        cvc.load(config: self.config)
+        waitForExpectations(timeout: 3) { _ in
+            XCTAssertTrue(self.loadedCalled)
+            XCTAssertEqual("testConnectUrl", cvc.connectUrl)
+        }
+        
+        cvc.close()
+        cvc.unload()
+        
+        addTeardownBlock { [weak cvc] in
+            XCTAssertNil(cvc)
+        }
+    }
     
 //    func testShowWebViewCalled() {
 //        let showWebViewExpectation = expectation(description: "showWebView")
@@ -106,21 +112,21 @@ class ConnectTests: XCTestCase {
 //        
 //    }
     
-//    func testCallbacks() {
-//        let cvc = ConnectViewController()
-//        cvc.load(config: self.config)
-//        
-//        cvc.handleLoadingComplete()
-//        cvc.handleConnectComplete(nil)
-//        cvc.handleConnectCancel()
-//        cvc.handleConnectError(nil)
-//        
-//        XCTAssertTrue(self.loadedCalled)
-//        XCTAssertTrue(self.doneCalled)
-//        XCTAssertTrue(self.errorCalled)
-//        XCTAssertTrue(self.cancelCalled)
-//        XCTAssertEqual(nil, self.errorMessage)
-//    }
+    func testCallbacks() {
+        let cvc = ConnectViewController()
+        cvc.load(config: self.config)
+        
+        cvc.handleLoadingComplete()
+        cvc.handleConnectComplete(nil)
+        cvc.handleConnectCancel()
+        cvc.handleConnectError(nil)
+        
+        XCTAssertTrue(self.loadedCalled)
+        XCTAssertTrue(self.doneCalled)
+        XCTAssertTrue(self.errorCalled)
+        XCTAssertTrue(self.cancelCalled)
+        XCTAssertEqual(nil, self.errorMessage)
+    }
     
     func testJailBreakCheck() {
         let cvc = ConnectViewController()

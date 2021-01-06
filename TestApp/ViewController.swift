@@ -122,17 +122,26 @@ class ViewController: UIViewController {
         print("connectViewController done")
         print(data?.debugDescription ?? "no data in callback")
         self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
     }
     
     func connectViewCancelled() {
         print("connectViewController cancel")
         self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
     }
     
     func connectViewError(_ data: NSDictionary?) {
         print("connectViewController error")
         print(data?.debugDescription ?? "no data in callback")
         self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
     }
     
     func connectViewRoute(_ data: NSDictionary?) {
