@@ -34,13 +34,14 @@ public struct ConnectViewConfig {
     public var route: ((NSDictionary?) -> Void)!
     public var user: ((NSDictionary?) -> Void)!
     
-    public init(connectUrl: String,
-         loaded: (() -> Void)? = nil,
-         done: ((NSDictionary?) -> Void)? = nil,
-         cancel: (() -> Void)? = nil,
-         error: ((NSDictionary?) -> Void)? = nil,
-         route: ((NSDictionary?) -> Void)? = nil,
-         userEvent: ((NSDictionary?) -> Void)? = nil) {
+    public init(
+        connectUrl: String,
+        loaded: (() -> Void)? = nil,
+        done: ((NSDictionary?) -> Void)? = nil,
+        cancel: (() -> Void)? = nil,
+        error: ((NSDictionary?) -> Void)? = nil,
+        route: ((NSDictionary?) -> Void)? = nil,
+        userEvent: ((NSDictionary?) -> Void)? = nil) {
         self.connectUrl = connectUrl
         self.loaded = loaded
         self.done = done
@@ -64,7 +65,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     var errorFunction: ((NSDictionary?) -> Void)!
     var routeFunction: ((NSDictionary?) -> Void)!
     var userFunction: ((NSDictionary?) -> Void)!
-
     
     internal var connectUrl: String = ""
     
@@ -98,10 +98,10 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(unloadChildWebView))
         
         let laContext = LAContext()
-        if (laContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil)) {
-            self.hasDeviceLockVerification = false;
+        if laContext.canEvaluatePolicy(.deviceOwnerAuthentication, error: nil) {
+            self.hasDeviceLockVerification = false
         } else {
-            self.hasDeviceLockVerification = true;
+            self.hasDeviceLockVerification = true
         }
         
         self.isJailBroken = self.hasBeenJailBroken()
@@ -143,7 +143,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func unload() {
-        if (self.removeObserver) {
+        if self.removeObserver {
             self.webView.navigationDelegate = nil
             self.webView.uiDelegate = nil
             self.webView.removeObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress))
@@ -155,13 +155,13 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     public func close() {
         stopPingTimer()
-        self.removeObserver = true;
-        self.navigationController?.dismiss(animated: false)
+        self.removeObserver = true
+        self.navigationController?.dismiss(animated: true)
     }
     
     func showWebView(connectUrl: String) {
         if let url = URL(string: connectUrl) {
-            if (self.webView == nil) {
+            if self.webView == nil {
                 let config = WKWebViewConfiguration()
                 let userContentController = WKUserContentController()
                 userContentController.add(self, name: self.messageNameConnect)
@@ -183,9 +183,9 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+    override public func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey: Any]?, context: UnsafeMutableRawPointer?) {
         if keyPath == "estimatedProgress" && !self.isWebViewLoaded {
-            if (self.webView.estimatedProgress == 1.0) {
+            if self.webView.estimatedProgress == 1.0 {
                 self.isWebViewLoaded = true
                 self.handleLoadingComplete()
             }
@@ -194,15 +194,15 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let host = navigationAction.request.url?.host {
-            if (navigationController?.navigationBar.isHidden == false) {
-                navigationItem.title = host;
+            if navigationController?.navigationBar.isHidden == false {
+                navigationItem.title = host
             }
         }
         decisionHandler(.allow)
     }
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // TODO: When would this happen? - Not during OAuth
+        // When would this happen? - Not during OAuth
         // print("Loading ChildWebView from non-standard location")
         if navigationAction.targetFrame == nil {
             self.loadChildWebView(url: (navigationAction.request.url)!)
@@ -223,29 +223,29 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     func loadChildWebView(url: URL) {
-        self.isChildWebViewLoaded = true;
-        self.childWebView = SFSafariViewController(url: url);
-        self.childWebView.delegate = self;
-        present(self.childWebView, animated: true, completion: nil);
+        self.isChildWebViewLoaded = true
+        self.childWebView = SFSafariViewController(url: url)
+        self.childWebView.delegate = self
+        present(self.childWebView, animated: true, completion: nil)
     }
     
     @objc func unloadChildWebView() {
-        if ((self.childWebView) != nil && self.isChildWebViewLoaded) {
-            navigationController?.setNavigationBarHidden(true, animated: true);
-            childWebView.dismiss(animated: true, completion: nil);
+        if self.childWebView != nil && self.isChildWebViewLoaded {
+            navigationController?.setNavigationBarHidden(true, animated: true)
+            childWebView.dismiss(animated: true, completion: nil)
             self.postWindowClosedMessage()
         }
     }
     
     func postWindowClosedMessage() {
-        let js = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
-        self.webView.evaluateJavaScript(js)
-        self.isChildWebViewLoaded = false;
+        let javascript = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
+        self.webView.evaluateJavaScript(javascript)
+        self.isChildWebViewLoaded = false
     }
     
     @objc func pingConnect() {
-        let js = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())' }, '\(self.connectUrl)')"
-        self.webView.evaluateJavaScript(js)
+        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())' }, '\(self.connectUrl)')"
+        self.webView.evaluateJavaScript(javascript)
     }
     
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
@@ -353,8 +353,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     internal func hasBeenJailBroken() -> Bool {
-        let fm = FileManager()
-        if (fm.fileExists(atPath: "Applications/Cydia.app") || fm.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib")) {
+        let fileMgr = FileManager()
+        if fileMgr.fileExists(atPath: "Applications/Cydia.app") || fileMgr.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") {
             return true
         }
         
