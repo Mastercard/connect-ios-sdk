@@ -27,20 +27,22 @@ class TestAppUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
     
-    // Before running Unit Tests use Postman to generate a Connect 2.0 URL and place URL inside generateUrl double quotes below.
-    var generatedUrl = ""
+    // Following Url Expires Fri Mar 05 2021 15:34:38 GMT-0700 (Mountain Standard Time)
+    var generatedUrl = "https://connect2.finicity.com/?consumerId=274552dfe090bccf5ce3e735d4ef51eb&customerId=1017865679&partnerId=2445582695152&signature=deadd0a331a90753dcd91d7da407d03ae5489b7784200a4ebded572da01ab608&timestamp=1612391678803&ttl=1614983678803&webhook=https%3A%2F%2Fwebhook.site%2F9f34fa76-f542-4785-a35c-fd4d2d57b1d2"
     
     let badExpiredUrl = "https://connect2.finicity.com?consumerId=dbceec20d8b97174e6aed204856f5a55&customerId=1016927519&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=abb1762e5c640f02823c56332daede3fe2f2143f4f5b8be6ec178ac72d7dbc5a&timestamp=1607806595887&ttl=1607813795887"
     
-    func test01VerifySetup() {
+    /*
+    func test00VerifySetup() {
         // For now tester needs to manually generate a Connect 2.0 URL before running tests.
         // Set the variable above generateUrl to your generated URL.
         if generatedUrl == "" {
             XCTFail("Please use Postman to generate a Connect 2.0 URL, set generateUrl variable to value, and re-run tests.")
         }
     }
+    */
 
-    func test02BadUrl() throws {
+    func test01BadUrl() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -58,7 +60,7 @@ class TestAppUITests: XCTestCase {
         app.webViews.webViews.webViews.buttons["Exit"].tap()
     }
     
-    func test03UseLegacyLoadFn() throws {
+    func test02UseLegacyLoadFn() throws {
         let app = XCUIApplication()
         app.launchArguments = ["-useLegacyLoadFn"]
         app.launch()
@@ -71,7 +73,7 @@ class TestAppUITests: XCTestCase {
 
     }
     
-    func test04GoodUrlCancel() throws {
+    func test03GoodUrlCancel() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -96,7 +98,7 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.buttons["Yes"].tap()
     }
     
-    func test05AddBankAccount() throws {
+    func test04AddBankAccount() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -110,8 +112,8 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.textFields["Search for your bank"].typeText("finbank")
         XCTAssert(webViewsQuery.staticTexts["FinBank"].waitForExistence(timeout: 5))
         webViewsQuery.staticTexts["FinBank"].tap()
-        XCTAssert(webViewsQuery.buttons["Continue"].waitForExistence(timeout: 5))
-        webViewsQuery.buttons["Continue"].tap()
+        XCTAssert(webViewsQuery.buttons["Next"].waitForExistence(timeout: 5))
+        webViewsQuery.buttons["Next"].tap()
         XCTAssert(webViewsQuery.staticTexts["Banking Userid"].waitForExistence(timeout: 5))
         XCTAssert(webViewsQuery.staticTexts["Banking Password"].waitForExistence(timeout: 5))
         webViewsQuery.textFields["Banking Userid"].tap()
@@ -119,7 +121,7 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.secureTextFields["Banking Password"].tap()
         webViewsQuery.secureTextFields["Banking Password"].typeText("go")
         webViewsQuery.buttons[" Secure sign in"].tap()
-        XCTAssert(webViewsQuery.staticTexts["Eligible accounts"].waitForExistence(timeout: 5))
+        XCTAssert(webViewsQuery.staticTexts["Eligible accounts"].waitForExistence(timeout: 15))
         webViewsQuery.otherElements["institution container"].children(matching: .other).element(boundBy: 2).switches["Account Checkbox"].tap()
         webViewsQuery.staticTexts["Savings"].swipeUp()
         XCTAssert(webViewsQuery.buttons["Save"].waitForExistence(timeout: 5))
@@ -128,7 +130,7 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.buttons["Submit"].tap()
     }
     
-    func test06SafariViewController() throws {
+    func test05SafariViewController() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -142,16 +144,16 @@ class TestAppUITests: XCTestCase {
         webViewsQuery.textFields["Search for your bank"].typeText("finbank")
         XCTAssert(webViewsQuery.staticTexts["FinBank"].waitForExistence(timeout: 5))
         webViewsQuery.staticTexts["FinBank"].tap()
-        XCTAssert(webViewsQuery.buttons["Continue"].waitForExistence(timeout: 5))
-        XCTAssert(webViewsQuery.staticTexts["Privacy Policy"].waitForExistence(timeout: 5))
-        webViewsQuery.staticTexts["Privacy Policy"].tap()
+        XCTAssert(webViewsQuery.buttons["Next"].waitForExistence(timeout: 5))
+        XCTAssert(webViewsQuery.staticTexts["Privacy policy"].waitForExistence(timeout: 5))
+        webViewsQuery.staticTexts["Privacy policy"].tap()
         
         let doneButton = app.buttons["Done"]
         XCTAssert(doneButton.waitForExistence(timeout: 5))
         doneButton.tap()
     }
     
-    func test07WindowOpen() throws {
+    func test06WindowOpen() throws {
         // UI tests must launch the application that they test.
         let app = XCUIApplication()
         app.launch()
@@ -168,42 +170,4 @@ class TestAppUITests: XCTestCase {
         doneButton.tap()
     }
     
-    func test08SendVersionInfoToWebview() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-        
-        app.textFields[AccessiblityIdentifer.UrlTextField.rawValue].typeText("https://pick3pro.com/TestSendData.html")
-        app.buttons[AccessiblityIdentifer.ConnectButton.rawValue].tap()
-        
-        // Wait for web form
-        XCTAssert(app.staticTexts["Datatype:"].waitForExistence(timeout: 5))
-        let webViewsQuery = app.webViews.webViews.webViews
-        
-        // Get the textfields in the webview
-        let textFields = webViewsQuery.descendants(matching: .textField)
-        
-        // Verify type is sdkVersion
-        if let dataTypeStr = textFields.element(boundBy: 0).value as? String {
-            XCTAssertEqual(dataTypeStr, "sdkVersion")
-        } else {
-            XCTFail("Did not find dataType text field")
-        }
-
-        // Verify version is 1.3.1
-        if let versionStr = textFields.element(boundBy: 1).value as? String {
-            XCTAssertEqual(versionStr, "1.3.1")
-        } else {
-            XCTFail("Did not find version text field")
-        }
-        
-        // Verify OS is iOS
-        if let osStr = textFields.element(boundBy: 2).value as? String {
-            XCTAssertEqual(osStr, "iOS")
-        } else {
-            XCTFail("Did not find version text field")
-        }
-
-    }
-
 }

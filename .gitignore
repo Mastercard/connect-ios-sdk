@@ -3,3 +3,5 @@
 derived_data/
 build/
 xcuserdata
+/derivedData/
+/.scannerwork/
