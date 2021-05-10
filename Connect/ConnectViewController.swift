@@ -20,12 +20,12 @@ protocol ConnectEventDelegate:AnyObject {
 
 // Default implementation if caller does not implement
 extension ConnectEventDelegate {
-    func onCancel(_ data: NSDictionary?) {  print("onCancel: default") }
-    func onDone(_ data: NSDictionary?) {  print("onDone: default") }
-    func onError(_ data: NSDictionary?) {  print("onError: default") }
-    func onLoad() { print("onLoad: default") }
-    func onRoute(_ data: NSDictionary?) {  print("onRoute: default") }
-    func onUser(_ data: NSDictionary?) {  print("onUser: default") }
+    func onCancel(_ data: NSDictionary?) {}
+    func onDone(_ data: NSDictionary?) {}
+    func onError(_ data: NSDictionary?) {}
+    func onLoad() {}
+    func onRoute(_ data: NSDictionary?) {}
+    func onUser(_ data: NSDictionary?) {}
 }
 
 class ConnectWebView: WKWebView {
@@ -44,66 +44,35 @@ class ConnectWebView: WKWebView {
     }
 }
 
-public struct ConnectViewConfig {
-    public var connectUrl: String
-    public var onLoad: (() -> Void)!
-    public var onDone: ((NSDictionary?) -> Void)!
-    public var onCancel: (() -> Void)!
-    public var onError: ((NSDictionary?) -> Void)!
-    public var onRoute: ((NSDictionary?) -> Void)!
-    public var onUser: ((NSDictionary?) -> Void)!
+private enum ConnectEvents: String {
+    // Internal events used by Connect
+    case ACK = "ack"
+    case CLOSE_POPUP = "closePopup"
+    case PING = "ping"
+    case URL = "url"
     
-    public init(
-        connectUrl: String,
-        onLoad: (() -> Void)? = nil,
-        onDone: ((NSDictionary?) -> Void)? = nil,
-        onCancel: (() -> Void)? = nil,
-        onError: ((NSDictionary?) -> Void)? = nil,
-        onRoute: ((NSDictionary?) -> Void)? = nil,
-        onUser: ((NSDictionary?) -> Void)? = nil) {
-        self.connectUrl = connectUrl
-        self.onLoad = onLoad
-        self.onDone = onDone
-        self.onCancel = onCancel
-        self.onError = onError
-        self.onRoute = onRoute
-        self.onUser = onUser
-    }
+    // App events exposed to developers
+    case CANCEL = "cancel"
+    case DONE = "done"
+    case ERROR = "error"
+    case ROUTE = "route"
+    case USER = "user"
 }
 
 public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
     weak var delegate: ConnectEventDelegate?
-    var webView: ConnectWebView!
-    var childWebView: SFSafariViewController!
-    var isWebViewLoaded = false
-    var isChildWebViewLoaded = false
-    var pingTimer: Timer?
-    
-    var loadedFunction: (() -> Void)!
-    var doneFunction: ((NSDictionary?) -> Void)!
-    var cancelFunction: (() -> Void)!
-    var errorFunction: ((NSDictionary?) -> Void)!
-    var routeFunction: ((NSDictionary?) -> Void)!
-    var userFunction: ((NSDictionary?) -> Void)!
-    
+    internal var webView: ConnectWebView!
+    internal var childWebView: SFSafariViewController!
+    internal var pingTimer: Timer?
     internal var connectUrl: String = ""
-    
-    var messageNameConnect = "iosConnect"
-    var messageTypeUrl = "url"
-    var messageTypeError = "error"
-    var messageTypeDone = "done"
-    var messageTypeCancel = "cancel"
-    var messageTypeClosePopup = "closePopup"
-    var messageTypeRoute = "route"
-    var messageTypeUser = "user"
-    var messageTypeAck = "ack"
-    var defaultErrorMessage = "Connect Error"
-    
+    internal var messageNameConnect = "iosConnect"
     internal var hasDeviceLockVerification = false
     internal var isJailBroken = false
+    internal var removeObserver = false
+    internal var isWebViewLoaded = false
+    internal var isChildWebViewLoaded = false
     
-    var removeObserver = false
-    
+    // MARK: - View/Lifecycle functions
     deinit {
         // Some squirrly hack to get rid of assertions showing up in console when deallocating.
         if webView != nil {
@@ -136,29 +105,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         stopPingTimer()
     }
     
-    public func load(config: ConnectViewConfig) {
-        self.connectUrl = config.connectUrl
-        self.loadedFunction = config.onLoad
-        self.errorFunction = config.onError
-        self.doneFunction = config.onDone
-        self.cancelFunction = config.onCancel
-        self.routeFunction = config.onRoute
-        self.userFunction = config.onUser
-        
+    // MARK: - Webview load/unload/close/show functions
+    public func load(_ connectUrl:String) {
+        self.connectUrl = connectUrl
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
-        }
-    }
-    
-    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onDone: @escaping (NSDictionary?) -> Void, onCancel: @escaping () -> Void, onError: @escaping (NSDictionary?) -> Void) {
-        self.connectUrl = connectUrl
-        self.loadedFunction = onLoaded
-        self.doneFunction = onDone
-        self.cancelFunction = onCancel
-        self.errorFunction = onError
-        
-        DispatchQueue.main.async {
-            self.showWebView(connectUrl: connectUrl)
         }
     }
     
@@ -212,6 +163,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
+    // MARK: - Webview Delegate functions
     public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
         if let host = navigationAction.request.url?.host {
             if navigationController?.navigationBar.isHidden == false {
@@ -234,6 +186,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         self.handleConnectComplete(nil)
     }
     
+    // MARK: - Safari/Popup functions
     public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true, completion: nil)
 
@@ -257,47 +210,43 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
+    // MARK: - Functions to interact with Connect
     func postWindowClosedMessage() {
         let javascript = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
         self.webView.evaluateJavaScript(javascript)
         self.isChildWebViewLoaded = false
     }
     
-    @objc func pingConnect() {
-        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())', platform: 'iOS' }, '\(self.connectUrl)')"
-        self.webView.evaluateJavaScript(javascript)
-    }
-    
     public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
         if let messageBody = message.body as? [String: Any], let type = messageBody["type"] as? String {
-            if type == self.messageTypeUrl, let urlString = messageBody["url"] as? String {
+            if type == ConnectEvents.URL.rawValue, let urlString = messageBody["url"] as? String {
                 if let url = URL(string: urlString) {
                     self.loadChildWebView(url: url)
                 }
-            } else if type == self.messageTypeError {
+            } else if type == ConnectEvents.ERROR.rawValue {
                 self.handleConnectError(messageBody)
-            } else if type == self.messageTypeDone {
+            } else if type == ConnectEvents.DONE.rawValue {
                 self.handleConnectComplete(messageBody)
-            } else if type == self.messageTypeCancel {
-                self.handleConnectCancel()
-            } else if type == self.messageTypeClosePopup {
+            } else if type == ConnectEvents.CANCEL.rawValue {
+                self.handleConnectCancel(messageBody)
+            } else if type == ConnectEvents.CLOSE_POPUP.rawValue {
                 self.unloadChildWebView()
-            } else if type == self.messageTypeRoute {
+            } else if type == ConnectEvents.ROUTE.rawValue {
                 self.handleConnectRoute(messageBody)
-            } else if type == self.messageTypeUser {
+            } else if type == ConnectEvents.USER.rawValue {
                 self.handleConnectUser(messageBody)
-            } else if type == self.messageTypeAck {
+            } else if type == ConnectEvents.ACK.rawValue {
                 stopPingTimer()
             }
         }
     }
     
-    internal func handleLoadingComplete() {
-        self.delegate?.onLoad()
-        self.loadedFunction?()
-        startPingTimer()
+    // MARK: - Ping Handling functions
+    @objc func pingConnect() {
+        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())', platform: 'iOS' }, '\(self.connectUrl)')"
+        self.webView.evaluateJavaScript(javascript)
     }
-    
+
     internal func startPingTimer() {
         if pingTimer != nil {
             pingTimer?.invalidate()
@@ -313,40 +262,41 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
+    // MARK: - Event Handling functions
+    internal func handleLoadingComplete() {
+        self.delegate?.onLoad()
+        startPingTimer()
+    }
+    
     internal func handleConnectComplete(_ message: [String: Any]?) {
         self.close()
         let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
         self.delegate?.onDone(data)
-        self.doneFunction?(data)
     }
     
-    internal func handleConnectCancel() {
+    internal func handleConnectCancel(_ message: [String: Any]?) {
         self.close()
-        // self.delegate?.onCancel()
-        if self.cancelFunction != nil {
-            self.cancelFunction()
-        }
+        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+        self.delegate?.onCancel(data)
     }
     
     internal func handleConnectError(_ message: [String: Any]?) {
         self.close()
         let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
         self.delegate?.onError(data)
-        self.errorFunction?(data)
     }
     
     internal func handleConnectRoute(_ message: [String: Any]?) {
         let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
         self.delegate?.onRoute(data)
-        self.routeFunction?(data)
     }
     
     internal func handleConnectUser(_ message: [String: Any]?) {
         let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
         self.delegate?.onUser(data)
-        self.userFunction?(data)
     }
     
+    // MARK: - JailBroken functions
     internal func hasBeenJailBroken() -> Bool {
         let fileMgr = FileManager()
         if fileMgr.fileExists(atPath: "Applications/Cydia.app") || fileMgr.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") {

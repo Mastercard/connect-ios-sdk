@@ -18,7 +18,6 @@ class ViewController: UIViewController {
     var connectViewController: ConnectViewController!
     var connectNavController: UINavigationController!
     let gradientLayer = CAGradientLayer()
-    var useLegacyLoadFn = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,10 +28,6 @@ class ViewController: UIViewController {
         
         self.navigationController?.navigationBar.isHidden = true
         setupViews()
-        
-        if CommandLine.arguments.contains("-useLegacyLoadFn") {
-            useLegacyLoadFn = true
-        }
         
         // Add tap gesture recognizer to dismiss keyboard when tapped outside of textfield.
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(screenTapped))
@@ -97,21 +92,45 @@ class ViewController: UIViewController {
             print("creating & loading connectViewController")
             self.connectViewController = ConnectViewController()
             self.connectViewController.delegate = self
-            if !useLegacyLoadFn {
-                let config = ConnectViewConfig(connectUrl: connectUrl, onLoad: self.connectViewLoaded, onDone: self.connectViewDone, onCancel: self.connectViewCancelled, onError: self.connectViewError, onRoute: self.connectViewRoute, onUser: self.connectViewUserEvent)
-                self.connectViewController.load(config: config)
-            } else {
-                self.connectViewController.load(connectUrl: connectUrl, onLoaded: self.connectViewLoaded, onDone: self.connectViewDone(_:), onCancel: self.connectViewCancelled, onError: self.connectViewError(_:))
-            }
-
+            self.connectViewController.load(connectUrl)
         } else {
             print("no connect url provided.")
             activityIndicator.stopAnimating()
         }
     }
     
-    func connectViewLoaded() {
-        print("connectViewController loaded")
+}
+
+extension ViewController: ConnectEventDelegate {
+    func onCancel(_ data: NSDictionary?) {
+        print("onCancel:")
+        print(data?.debugDescription ?? "no data in callback")
+        self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
+    }
+    
+    func onDone(_ data: NSDictionary?) {
+        print("onDone:")
+        print(data?.debugDescription ?? "no data in callback")
+        self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
+    }
+    
+    func onError(_ data: NSDictionary?) {
+        print("onError:")
+        print(data?.debugDescription ?? "no data in callback")
+        self.activityIndicator.stopAnimating()
+        // Needed to trigger deallocation of ConnectViewController
+        self.connectViewController = nil
+        self.connectNavController = nil
+    }
+    
+    func onLoad() {
+        print("onLoad:")
         self.connectNavController = UINavigationController(rootViewController: self.connectViewController)
         self.connectNavController.modalPresentationStyle = .automatic
         self.connectNavController.isModalInPresentation = true
@@ -119,62 +138,14 @@ class ViewController: UIViewController {
         self.present(self.connectNavController, animated: true)
     }
     
-    func connectViewDone(_ data: NSDictionary?) {
-        print("connectViewController done")
-        print(data?.debugDescription ?? "no data in callback")
-        self.activityIndicator.stopAnimating()
-        // Needed to trigger deallocation of ConnectViewController
-        self.connectViewController = nil
-        self.connectNavController = nil
-    }
-    
-    func connectViewCancelled() {
-        print("connectViewController cancel")
-        self.activityIndicator.stopAnimating()
-        // Needed to trigger deallocation of ConnectViewController
-        self.connectViewController = nil
-        self.connectNavController = nil
-    }
-    
-    func connectViewError(_ data: NSDictionary?) {
-        print("connectViewController error")
-        print(data?.debugDescription ?? "no data in callback")
-        self.activityIndicator.stopAnimating()
-        // Needed to trigger deallocation of ConnectViewController
-        self.connectViewController = nil
-        self.connectNavController = nil
-    }
-    
-    func connectViewRoute(_ data: NSDictionary?) {
-        print("connectViewController route")
+    func onRoute(_ data: NSDictionary?) {
+        print("onRoute:")
         print(data?.debugDescription ?? "no data in callback")
     }
     
-    func connectViewUserEvent(_ data: NSDictionary?) {
-        print("connectViewController user")
+    func onUser(_ data: NSDictionary?) {
+        print("onUser:")
         print(data?.debugDescription ?? "no data in callback")
-    }
-    
-}
-
-extension ViewController: ConnectEventDelegate {
-    func onCancel(_ data: NSDictionary?) {
-        print("connectViewController cancel")
-        print(data?.debugDescription ?? "no data in callback")
-    }
-    
-    func onDone(_ data: NSDictionary?) {
-        print("connectViewController done")
-        print(data?.debugDescription ?? "no data in callback")
-    }
-    
-    func onError(_ data: NSDictionary?) {
-        print("connectViewController error")
-        print(data?.debugDescription ?? "no data in callback")
-    }
-    
-    func onLoad() {
-        print("connectViewController loaded")
     }
 }
 
