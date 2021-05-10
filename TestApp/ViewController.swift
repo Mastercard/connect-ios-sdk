@@ -96,8 +96,9 @@ class ViewController: UIViewController {
         if let connectUrl = urlInput.text {
             print("creating & loading connectViewController")
             self.connectViewController = ConnectViewController()
+            self.connectViewController.delegate = self
             if !useLegacyLoadFn {
-                let config = ConnectViewConfig(connectUrl: connectUrl, loaded: self.connectViewLoaded, done: self.connectViewDone, cancel: self.connectViewCancelled, error: self.connectViewError, route: self.connectViewRoute, userEvent: self.connectViewUserEvent)
+                let config = ConnectViewConfig(connectUrl: connectUrl, onLoad: self.connectViewLoaded, onDone: self.connectViewDone, onCancel: self.connectViewCancelled, onError: self.connectViewError, onRoute: self.connectViewRoute, onUser: self.connectViewUserEvent)
                 self.connectViewController.load(config: config)
             } else {
                 self.connectViewController.load(connectUrl: connectUrl, onLoaded: self.connectViewLoaded, onDone: self.connectViewDone(_:), onCancel: self.connectViewCancelled, onError: self.connectViewError(_:))
@@ -154,6 +155,27 @@ class ViewController: UIViewController {
         print(data?.debugDescription ?? "no data in callback")
     }
     
+}
+
+extension ViewController: ConnectEventDelegate {
+    func onCancel(_ data: NSDictionary?) {
+        print("connectViewController cancel")
+        print(data?.debugDescription ?? "no data in callback")
+    }
+    
+    func onDone(_ data: NSDictionary?) {
+        print("connectViewController done")
+        print(data?.debugDescription ?? "no data in callback")
+    }
+    
+    func onError(_ data: NSDictionary?) {
+        print("connectViewController error")
+        print(data?.debugDescription ?? "no data in callback")
+    }
+    
+    func onLoad() {
+        print("connectViewController loaded")
+    }
 }
 
 extension ViewController: UIAdaptivePresentationControllerDelegate {

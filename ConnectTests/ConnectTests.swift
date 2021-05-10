@@ -10,42 +10,53 @@ import XCTest
 
 class ConnectTests: XCTestCase {
 
-    var loadedCalled = false
-    var doneCalled = false
-    var errorCalled = false
-    var cancelCalled = false
-    var errorMessage: NSDictionary! = nil
+    var onLoadCalled = false
+    var onDoneCalled = false
+    var onErrorCalled = false
+    var onCancelCalled = false
+    var onRouteCalled = false
+    var onUserCalled = false
+    var message: NSDictionary! = nil
     var config: ConnectViewConfig! = nil
-    var loadedExp: XCTestExpectation? = nil
-    var errorExp: XCTestExpectation? = nil
+    var onLoadExp: XCTestExpectation? = nil
+    var onErrorExp: XCTestExpectation? = nil
+    var onDoneExp: XCTestExpectation? = nil
+    var onRouteExp: XCTestExpectation? = nil
+    var onUserExp: XCTestExpectation? = nil
+    var onCancelExp: XCTestExpectation? = nil
     
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.
-        
-        self.loadedCalled = false
-        self.doneCalled = false
-        self.errorCalled = false
-        self.cancelCalled = false
-        self.errorMessage = nil
-        self.config = ConnectViewConfig(connectUrl: "testConnectUrl", loaded: self.dummyLoadedCallback, done: self.dummyDoneCallback, cancel: self.dummyCancelCallback, error: self.dummyErrorCallback)
+        resetState()
+
+        self.config = ConnectViewConfig(connectUrl: "testConnectUrl", onLoad: self.dummyLoadedCallback, onDone: self.dummyDoneCallback, onCancel: self.dummyCancelCallback, onError: self.dummyErrorCallback, onRoute: self.dummyRouteCallback, onUser: dummyUserCallback)
     }
 
     override func tearDown() {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
-        
-        self.loadedCalled = false
-        self.doneCalled = false
-        self.errorCalled = false
-        self.cancelCalled = false
-        self.errorMessage = nil
+        resetState()
+    }
+    
+    func resetState() {
+        self.onLoadCalled = false
+        self.onDoneCalled = false
+        self.onErrorCalled = false
+        self.onCancelCalled = false
+        self.onRouteCalled = false
+        self.onUserCalled = false
         self.config = nil
-        self.loadedExp = nil
-        self.errorExp = nil
+        self.message = nil
+        self.onLoadExp = nil
+        self.onErrorExp = nil
+        self.onDoneExp = nil
+        self.onRouteExp = nil
+        self.onUserExp = nil
+        self.onCancelExp = nil
     }
     
     func testVersionString() {
         let version = sdkVersion()
-        XCTAssertEqual("1.3.1", version)
+        XCTAssertEqual("2.0.0", version)
     }
     
     func testLoad() {
@@ -57,21 +68,21 @@ class ConnectTests: XCTestCase {
     }
     
     func testLoadWebView() {
-        self.loadedExp = expectation(description: "Loaded callback")
+        self.onLoadExp = expectation(description: "Loaded callback")
         let cvc = ConnectViewController()
         cvc.load(config: self.config)
         waitForExpectations(timeout: 3) { _ in
-            XCTAssertTrue(self.loadedCalled)
+            XCTAssertTrue(self.onLoadCalled)
             XCTAssertEqual("testConnectUrl", cvc.connectUrl)
         }
     }
     
     func testMemoryLeak() {
-        self.loadedExp = expectation(description: "Loaded callback")
+        self.onLoadExp = expectation(description: "Loaded callback")
         let cvc = ConnectViewController()
         cvc.load(config: self.config)
         waitForExpectations(timeout: 3) { _ in
-            XCTAssertTrue(self.loadedCalled)
+            XCTAssertTrue(self.onLoadCalled)
             XCTAssertEqual("testConnectUrl", cvc.connectUrl)
         }
         
@@ -117,15 +128,30 @@ class ConnectTests: XCTestCase {
         cvc.load(config: self.config)
         
         cvc.handleLoadingComplete()
-        cvc.handleConnectComplete(nil)
-        cvc.handleConnectCancel()
-        cvc.handleConnectError(nil)
+        XCTAssertTrue(self.onLoadCalled)
         
-        XCTAssertTrue(self.loadedCalled)
-        XCTAssertTrue(self.doneCalled)
-        XCTAssertTrue(self.errorCalled)
-        XCTAssertTrue(self.cancelCalled)
-        XCTAssertEqual(nil, self.errorMessage)
+        cvc.handleConnectCancel()
+        XCTAssertTrue(self.onCancelCalled)
+        
+        self.message = ["key": "value"]
+        cvc.handleConnectComplete(nil)
+        XCTAssertTrue(self.onDoneCalled)
+        XCTAssertEqual(nil, self.message)
+
+        self.message = ["key": "value"]
+        cvc.handleConnectError(nil)
+        XCTAssertTrue(self.onErrorCalled)
+        XCTAssertEqual(nil, self.message)
+        
+        self.message = ["key": "value"]
+        cvc.handleConnectUser(nil)
+        XCTAssertTrue(self.onUserCalled)
+        XCTAssertEqual(nil, self.message)
+        
+        self.message = ["key": "value"]
+        cvc.handleConnectRoute(nil)
+        XCTAssertTrue(self.onRouteCalled)
+        XCTAssertEqual(nil, self.message)
     }
     
     func testJailBreakCheck() {
@@ -134,22 +160,37 @@ class ConnectTests: XCTestCase {
     }
     
     func dummyLoadedCallback() {
-        self.loadedCalled = true
-        self.loadedExp?.fulfill()
-    }
-    
-    func dummyErrorCallback(_ data: NSDictionary?) {
-        self.errorCalled = true
-        self.errorMessage = data
-        self.errorExp?.fulfill()
-    }
-    
-    func dummyDoneCallback(_ data: NSDictionary?) {
-        self.doneCalled = true
+        self.onLoadCalled = true
+        self.onLoadExp?.fulfill()
     }
     
     func dummyCancelCallback() {
-        self.cancelCalled = true
+        self.onCancelCalled = true
+        self.onCancelExp?.fulfill()
+    }
+    
+    func dummyErrorCallback(_ data: NSDictionary?) {
+        self.onErrorCalled = true
+        self.message = data
+        self.onErrorExp?.fulfill()
+    }
+    
+    func dummyDoneCallback(_ data: NSDictionary?) {
+        self.onDoneCalled = true
+        self.message = data
+        self.onDoneExp?.fulfill()
+    }
+    
+    func dummyUserCallback(_ data: NSDictionary?) {
+        self.onUserCalled = true
+        self.message = data
+        self.onUserExp?.fulfill()
+    }
+    
+    func dummyRouteCallback(_ data: NSDictionary?) {
+        self.onRouteCalled = true
+        self.message = data
+        self.onRouteExp?.fulfill()
     }
 
 }

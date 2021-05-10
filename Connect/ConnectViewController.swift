@@ -9,6 +9,25 @@ import WebKit
 import LocalAuthentication
 import SafariServices
 
+protocol ConnectEventDelegate:AnyObject {
+    func onCancel(_ data: NSDictionary?)
+    func onDone(_ data: NSDictionary?)
+    func onError(_ data: NSDictionary?)
+    func onLoad()
+    func onRoute(_ data: NSDictionary?)
+    func onUser(_ data: NSDictionary?)
+}
+
+// Default implementation if caller does not implement
+extension ConnectEventDelegate {
+    func onCancel(_ data: NSDictionary?) {  print("onCancel: default") }
+    func onDone(_ data: NSDictionary?) {  print("onDone: default") }
+    func onError(_ data: NSDictionary?) {  print("onError: default") }
+    func onLoad() { print("onLoad: default") }
+    func onRoute(_ data: NSDictionary?) {  print("onRoute: default") }
+    func onUser(_ data: NSDictionary?) {  print("onUser: default") }
+}
+
 class ConnectWebView: WKWebView {
     override var inputAccessoryView: UIView? {
         // Overriding the default inputAccessoryView so the 'Done' button
@@ -27,32 +46,33 @@ class ConnectWebView: WKWebView {
 
 public struct ConnectViewConfig {
     public var connectUrl: String
-    public var loaded: (() -> Void)!
-    public var done: ((NSDictionary?) -> Void)!
-    public var cancel: (() -> Void)!
-    public var error: ((NSDictionary?) -> Void)!
-    public var route: ((NSDictionary?) -> Void)!
-    public var user: ((NSDictionary?) -> Void)!
+    public var onLoad: (() -> Void)!
+    public var onDone: ((NSDictionary?) -> Void)!
+    public var onCancel: (() -> Void)!
+    public var onError: ((NSDictionary?) -> Void)!
+    public var onRoute: ((NSDictionary?) -> Void)!
+    public var onUser: ((NSDictionary?) -> Void)!
     
     public init(
         connectUrl: String,
-        loaded: (() -> Void)? = nil,
-        done: ((NSDictionary?) -> Void)? = nil,
-        cancel: (() -> Void)? = nil,
-        error: ((NSDictionary?) -> Void)? = nil,
-        route: ((NSDictionary?) -> Void)? = nil,
-        userEvent: ((NSDictionary?) -> Void)? = nil) {
+        onLoad: (() -> Void)? = nil,
+        onDone: ((NSDictionary?) -> Void)? = nil,
+        onCancel: (() -> Void)? = nil,
+        onError: ((NSDictionary?) -> Void)? = nil,
+        onRoute: ((NSDictionary?) -> Void)? = nil,
+        onUser: ((NSDictionary?) -> Void)? = nil) {
         self.connectUrl = connectUrl
-        self.loaded = loaded
-        self.done = done
-        self.cancel = cancel
-        self.error = error
-        self.route = route
-        self.user = userEvent
+        self.onLoad = onLoad
+        self.onDone = onDone
+        self.onCancel = onCancel
+        self.onError = onError
+        self.onRoute = onRoute
+        self.onUser = onUser
     }
 }
 
 public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
+    weak var delegate: ConnectEventDelegate?
     var webView: ConnectWebView!
     var childWebView: SFSafariViewController!
     var isWebViewLoaded = false
@@ -118,12 +138,12 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     public func load(config: ConnectViewConfig) {
         self.connectUrl = config.connectUrl
-        self.loadedFunction = config.loaded
-        self.errorFunction = config.error
-        self.doneFunction = config.done
-        self.cancelFunction = config.cancel
-        self.routeFunction = config.route
-        self.userFunction = config.user
+        self.loadedFunction = config.onLoad
+        self.errorFunction = config.onError
+        self.doneFunction = config.onDone
+        self.cancelFunction = config.onCancel
+        self.routeFunction = config.onRoute
+        self.userFunction = config.onUser
         
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
@@ -244,7 +264,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     @objc func pingConnect() {
-        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())' }, '\(self.connectUrl)')"
+        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())', platform: 'iOS' }, '\(self.connectUrl)')"
         self.webView.evaluateJavaScript(javascript)
     }
     
@@ -273,9 +293,8 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     internal func handleLoadingComplete() {
-        if self.loadedFunction != nil {
-            self.loadedFunction()
-        }
+        self.delegate?.onLoad()
+        self.loadedFunction?()
         startPingTimer()
     }
     
@@ -296,20 +315,14 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     internal func handleConnectComplete(_ message: [String: Any]?) {
         self.close()
-        if self.doneFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.doneFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.doneFunction(query)
-            } else {
-                self.doneFunction(nil)
-            }
-            
-        }
+        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+        self.delegate?.onDone(data)
+        self.doneFunction?(data)
     }
     
     internal func handleConnectCancel() {
         self.close()
+        // self.delegate?.onCancel()
         if self.cancelFunction != nil {
             self.cancelFunction()
         }
@@ -317,39 +330,21 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     
     internal func handleConnectError(_ message: [String: Any]?) {
         self.close()
-        if self.errorFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.errorFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.errorFunction(query)
-            } else {
-                self.errorFunction(nil)
-            }
-        }
+        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+        self.delegate?.onError(data)
+        self.errorFunction?(data)
     }
     
     internal func handleConnectRoute(_ message: [String: Any]?) {
-        if self.routeFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.routeFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.routeFunction(query)
-            } else {
-                self.routeFunction(nil)
-            }
-        }
+        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+        self.delegate?.onRoute(data)
+        self.routeFunction?(data)
     }
     
     internal func handleConnectUser(_ message: [String: Any]?) {
-        if self.userFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.userFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.userFunction(query)
-            } else {
-                self.userFunction(nil)
-            }
-        }
+        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+        self.delegate?.onUser(data)
+        self.userFunction?(data)
     }
     
     internal func hasBeenJailBroken() -> Bool {
@@ -357,7 +352,6 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         if fileMgr.fileExists(atPath: "Applications/Cydia.app") || fileMgr.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") {
             return true
         }
-        
         return false
     }
 }
