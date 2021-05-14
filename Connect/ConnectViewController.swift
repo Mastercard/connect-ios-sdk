@@ -18,16 +18,6 @@ protocol ConnectEventDelegate:AnyObject {
     func onUser(_ data: NSDictionary?)
 }
 
-// Default implementation if caller does not implement
-extension ConnectEventDelegate {
-    func onCancel(_ data: NSDictionary?) {}
-    func onDone(_ data: NSDictionary?) {}
-    func onError(_ data: NSDictionary?) {}
-    func onLoad() {}
-    func onRoute(_ data: NSDictionary?) {}
-    func onUser(_ data: NSDictionary?) {}
-}
-
 class ConnectWebView: WKWebView {
     override var inputAccessoryView: UIView? {
         // Overriding the default inputAccessoryView so the 'Done' button
@@ -174,8 +164,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // When would this happen? - Not during OAuth
-        // print("Loading ChildWebView from non-standard location")
+        // Triggered by window.open()
         if navigationAction.targetFrame == nil {
             self.loadChildWebView(url: (navigationAction.request.url)!)
         }
@@ -268,32 +257,31 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         startPingTimer()
     }
     
+    internal func getDataDictFromMessage(_ message: [String: Any]?) -> NSDictionary? {
+        return message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+    }
+    
     internal func handleConnectComplete(_ message: [String: Any]?) {
         self.close()
-        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
-        self.delegate?.onDone(data)
+        self.delegate?.onDone(getDataDictFromMessage(message))
     }
     
     internal func handleConnectCancel(_ message: [String: Any]?) {
         self.close()
-        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
-        self.delegate?.onCancel(data)
+        self.delegate?.onCancel(getDataDictFromMessage(message))
     }
     
     internal func handleConnectError(_ message: [String: Any]?) {
         self.close()
-        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
-        self.delegate?.onError(data)
+        self.delegate?.onError(getDataDictFromMessage(message))
     }
     
     internal func handleConnectRoute(_ message: [String: Any]?) {
-        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
-        self.delegate?.onRoute(data)
+        self.delegate?.onRoute(getDataDictFromMessage(message))
     }
     
     internal func handleConnectUser(_ message: [String: Any]?) {
-        let data = message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
-        self.delegate?.onUser(data)
+        self.delegate?.onUser(getDataDictFromMessage(message))
     }
     
     // MARK: - JailBroken functions
