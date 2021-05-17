@@ -28,7 +28,7 @@ class TestAppUITests: XCTestCase {
     }
     
     // Following Url Expires Fri Mar 05 2021 15:34:38 GMT-0700 (Mountain Standard Time)
-    var generatedUrl = "https://connect2.finicity.com?consumerId=0df8f32051d22c5a573d3e2bafa1a175&customerId=5006007497&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=799023958f72d3b905b4fa47929d1f2ec620fbacc9eb2bc9d1262726cecb7692&timestamp=1621008974584&ttl=1621016174584"
+    var generatedUrl = "https://connect2.finicity.com?consumerId=a957503f127cd202538ad3f93554b168&customerId=5006148639&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=4b0c8fa429055d756fceabc20f6fe232718b6c07e7ca127bb3f9045313b23bb9&timestamp=1621265793512&ttl=1621272993512"
     
     let badExpiredUrl = "https://connect2.finicity.com?consumerId=dbceec20d8b97174e6aed204856f5a55&customerId=1016927519&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=abb1762e5c640f02823c56332daede3fe2f2143f4f5b8be6ec178ac72d7dbc5a&timestamp=1607806595887&ttl=1607813795887"
     
