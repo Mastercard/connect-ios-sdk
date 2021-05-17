@@ -9,7 +9,7 @@ import WebKit
 import LocalAuthentication
 import SafariServices
 
-protocol ConnectEventDelegate:AnyObject {
+protocol ConnectEventDelegate: AnyObject {
     func onCancel(_ data: NSDictionary?)
     func onDone(_ data: NSDictionary?)
     func onError(_ data: NSDictionary?)
@@ -37,7 +37,7 @@ class ConnectWebView: WKWebView {
 private enum ConnectEvents: String {
     // Internal events used by Connect
     case ACK = "ack"
-    case CLOSE_POPUP = "closePopup"
+    case CLOSEPOPUP = "closePopup"
     case PING = "ping"
     case URL = "url"
     
@@ -96,7 +96,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
     }
     
     // MARK: - Webview load/unload/close/show functions
-    public func load(_ connectUrl:String) {
+    public func load(_ connectUrl: String) {
         self.connectUrl = connectUrl
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
@@ -218,7 +218,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
                 self.handleConnectComplete(messageBody)
             } else if type == ConnectEvents.CANCEL.rawValue {
                 self.handleConnectCancel(messageBody)
-            } else if type == ConnectEvents.CLOSE_POPUP.rawValue {
+            } else if type == ConnectEvents.CLOSEPOPUP.rawValue {
                 self.unloadChildWebView()
             } else if type == ConnectEvents.ROUTE.rawValue {
                 self.handleConnectRoute(messageBody)
