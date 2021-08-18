@@ -12,5 +12,5 @@ public func sdkVersion() -> String {
     if let dict = Bundle(identifier: "com.finicity.Connect")?.infoDictionary {
         version = dict["CFBundleShortVersionString"] as? String
     }
-    return version ?? "1.3.1"
+    return version ?? "2.0.0"
 }

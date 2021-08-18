@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXAggregateTarget section */
@@ -33,6 +33,7 @@
 		214B5BFF2589636C00FA6A1E /* Version.swift in Sources */ = {isa = PBXBuildFile; fileRef = 212CDB162565CB9700118601 /* Version.swift */; };
 		214B5C052589655400FA6A1E /* AccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D037E258942E900342EF5 /* AccessibilityIdentifier.swift */; };
 		216D037F258942E900342EF5 /* AccessibilityIdentifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 216D037E258942E900342EF5 /* AccessibilityIdentifier.swift */; };
+		219261EA2652E81600879BAF /* FinicityConnect.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 219261E92652E81600879BAF /* FinicityConnect.xcframework */; };
 		6B94CDE423A819F30077D65A /* Connect.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6B94CDDA23A819F20077D65A /* Connect.framework */; };
 		6B94CDE923A819F30077D65A /* ConnectTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B94CDE823A819F30077D65A /* ConnectTests.swift */; };
 		6B94CDEB23A819F30077D65A /* Connect.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B94CDDD23A819F20077D65A /* Connect.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -77,6 +78,7 @@
 		214B5BEC25895E9F00FA6A1E /* TestAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestAppUITests.swift; sourceTree = "<group>"; };
 		214B5BEE25895E9F00FA6A1E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		216D037E258942E900342EF5 /* AccessibilityIdentifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityIdentifier.swift; sourceTree = "<group>"; };
+		219261E92652E81600879BAF /* FinicityConnect.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; path = FinicityConnect.xcframework; sourceTree = "<group>"; };
 		6B94CDDA23A819F20077D65A /* Connect.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Connect.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B94CDDD23A819F20077D65A /* Connect.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Connect.h; sourceTree = "<group>"; };
 		6B94CDDE23A819F20077D65A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				219261EA2652E81600879BAF /* FinicityConnect.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -144,9 +147,18 @@
 			path = TestAppUITests;
 			sourceTree = "<group>";
 		};
+		219261E82652E7D600879BAF /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				219261E92652E81600879BAF /* FinicityConnect.xcframework */,
+			);
+			path = Frameworks;
+			sourceTree = "<group>";
+		};
 		6B94CDD023A819F20077D65A = {
 			isa = PBXGroup;
 			children = (
+				219261E82652E7D600879BAF /* Frameworks */,
 				6BA9DA452416D35E00884A40 /* Config.xcconfig */,
 				6B94CDDC23A819F20077D65A /* Connect */,
 				6B94CDE723A819F30077D65A /* ConnectTests */,
@@ -515,6 +527,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.TestAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Frameworks/FinicityConnect.xcframework/ios-x86_64-simulator $(PROJECT_DIR)/Frameworks/FinicityConnect.xcframework/ios-arm64";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = TestApp;
@@ -535,6 +548,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.TestAppUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INCLUDE_PATHS = "$(PROJECT_DIR)/Frameworks/FinicityConnect.xcframework/ios-x86_64-simulator $(PROJECT_DIR)/Frameworks/FinicityConnect.xcframework/ios-arm64";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = TestApp;
@@ -689,7 +703,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 2.0.0;
 				NEW_SETTING = "";
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
@@ -721,7 +735,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 2.0.0;
 				NEW_SETTING = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.finicity.Connect;
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";

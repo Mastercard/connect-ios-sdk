@@ -9,6 +9,15 @@ import WebKit
 import LocalAuthentication
 import SafariServices
 
+public protocol ConnectEventDelegate: AnyObject {
+    func onCancel(_ data: NSDictionary?)
+    func onDone(_ data: NSDictionary?)
+    func onError(_ data: NSDictionary?)
+    func onLoad()
+    func onRoute(_ data: NSDictionary?)
+    func onUser(_ data: NSDictionary?)
+}
+
 class ConnectWebView: WKWebView {
     override var inputAccessoryView: UIView? {
         // Overriding the default inputAccessoryView so the 'Done' button
@@ -25,65 +34,36 @@ class ConnectWebView: WKWebView {
     }
 }
 
-public struct ConnectViewConfig {
-    public var connectUrl: String
-    public var loaded: (() -> Void)!
-    public var done: ((NSDictionary?) -> Void)!
-    public var cancel: (() -> Void)!
-    public var error: ((NSDictionary?) -> Void)!
-    public var route: ((NSDictionary?) -> Void)!
-    public var user: ((NSDictionary?) -> Void)!
+private enum ConnectEvents: String {
+    // Internal events used by Connect
+    case ACK = "ack"
+    case CLOSEPOPUP = "closePopup"
+    case PING = "ping"
+    case URL = "url"
     
-    public init(
-        connectUrl: String,
-        loaded: (() -> Void)? = nil,
-        done: ((NSDictionary?) -> Void)? = nil,
-        cancel: (() -> Void)? = nil,
-        error: ((NSDictionary?) -> Void)? = nil,
-        route: ((NSDictionary?) -> Void)? = nil,
-        userEvent: ((NSDictionary?) -> Void)? = nil) {
-        self.connectUrl = connectUrl
-        self.loaded = loaded
-        self.done = done
-        self.cancel = cancel
-        self.error = error
-        self.route = route
-        self.user = userEvent
-    }
+    // App events exposed to developers
+    case CANCEL = "cancel"
+    case DONE = "done"
+    case ERROR = "error"
+    case ROUTE = "route"
+    case USER = "user"
 }
 
-public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUIDelegate, WKScriptMessageHandler, SFSafariViewControllerDelegate {
-    var webView: ConnectWebView!
-    var childWebView: SFSafariViewController!
-    var isWebViewLoaded = false
-    var isChildWebViewLoaded = false
-    var pingTimer: Timer?
-    
-    var loadedFunction: (() -> Void)!
-    var doneFunction: ((NSDictionary?) -> Void)!
-    var cancelFunction: (() -> Void)!
-    var errorFunction: ((NSDictionary?) -> Void)!
-    var routeFunction: ((NSDictionary?) -> Void)!
-    var userFunction: ((NSDictionary?) -> Void)!
-    
+public class ConnectViewController: UIViewController {
+    // MARK: - Instance variables
+    public weak var delegate: ConnectEventDelegate?
+    internal var webView: ConnectWebView!
+    internal var childWebView: SFSafariViewController!
+    internal var pingTimer: Timer?
     internal var connectUrl: String = ""
-    
-    var messageNameConnect = "iosConnect"
-    var messageTypeUrl = "url"
-    var messageTypeError = "error"
-    var messageTypeDone = "done"
-    var messageTypeCancel = "cancel"
-    var messageTypeClosePopup = "closePopup"
-    var messageTypeRoute = "route"
-    var messageTypeUser = "user"
-    var messageTypeAck = "ack"
-    var defaultErrorMessage = "Connect Error"
-    
+    internal var messageNameConnect = "iosConnect"
     internal var hasDeviceLockVerification = false
     internal var isJailBroken = false
+    internal var removeObserver = false
+    internal var isWebViewLoaded = false
+    internal var isChildWebViewLoaded = false
     
-    var removeObserver = false
-    
+    // MARK: - View/Lifecycle functions
     deinit {
         // Some squirrly hack to get rid of assertions showing up in console when deallocating.
         if webView != nil {
@@ -116,29 +96,11 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         stopPingTimer()
     }
     
-    public func load(config: ConnectViewConfig) {
-        self.connectUrl = config.connectUrl
-        self.loadedFunction = config.loaded
-        self.errorFunction = config.error
-        self.doneFunction = config.done
-        self.cancelFunction = config.cancel
-        self.routeFunction = config.route
-        self.userFunction = config.user
-        
+    // MARK: - Webview load/unload/close/show functions
+    public func load(_ connectUrl: String) {
+        self.connectUrl = connectUrl
         DispatchQueue.main.async {
             self.showWebView(connectUrl: self.connectUrl)
-        }
-    }
-    
-    public func load(connectUrl: String, onLoaded: @escaping () -> Void, onDone: @escaping (NSDictionary?) -> Void, onCancel: @escaping () -> Void, onError: @escaping (NSDictionary?) -> Void) {
-        self.connectUrl = connectUrl
-        self.loadedFunction = onLoaded
-        self.doneFunction = onDone
-        self.cancelFunction = onCancel
-        self.errorFunction = onError
-        
-        DispatchQueue.main.async {
-            self.showWebView(connectUrl: connectUrl)
         }
     }
     
@@ -192,36 +154,7 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-        if let host = navigationAction.request.url?.host {
-            if navigationController?.navigationBar.isHidden == false {
-                navigationItem.title = host
-            }
-        }
-        decisionHandler(.allow)
-    }
-    
-    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
-        // When would this happen? - Not during OAuth
-        // print("Loading ChildWebView from non-standard location")
-        if navigationAction.targetFrame == nil {
-            self.loadChildWebView(url: (navigationAction.request.url)!)
-        }
-        return nil
-    }
-    
-    public func webViewDidClose(_ webView: WKWebView) {
-        self.handleConnectComplete(nil)
-    }
-    
-    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        controller.dismiss(animated: true, completion: nil)
-
-        if self.isChildWebViewLoaded {
-            self.postWindowClosedMessage()
-        }
-    }
-    
+    // MARK: - Safari/Popup functions
     func loadChildWebView(url: URL) {
         self.isChildWebViewLoaded = true
         self.childWebView = SFSafariViewController(url: url)
@@ -237,48 +170,19 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
+    // MARK: - Functions to interact with Connect
     func postWindowClosedMessage() {
         let javascript = "window.postMessage({ type: 'window', closed: true }, '\(self.connectUrl)')"
         self.webView.evaluateJavaScript(javascript)
         self.isChildWebViewLoaded = false
     }
     
+    // MARK: - Ping Handling functions
     @objc func pingConnect() {
-        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())' }, '\(self.connectUrl)')"
+        let javascript = "window.postMessage({ type: 'ping', sdkVersion: '\(sdkVersion())', platform: 'iOS' }, '\(self.connectUrl)')"
         self.webView.evaluateJavaScript(javascript)
     }
-    
-    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
-        if let messageBody = message.body as? [String: Any], let type = messageBody["type"] as? String {
-            if type == self.messageTypeUrl, let urlString = messageBody["url"] as? String {
-                if let url = URL(string: urlString) {
-                    self.loadChildWebView(url: url)
-                }
-            } else if type == self.messageTypeError {
-                self.handleConnectError(messageBody)
-            } else if type == self.messageTypeDone {
-                self.handleConnectComplete(messageBody)
-            } else if type == self.messageTypeCancel {
-                self.handleConnectCancel()
-            } else if type == self.messageTypeClosePopup {
-                self.unloadChildWebView()
-            } else if type == self.messageTypeRoute {
-                self.handleConnectRoute(messageBody)
-            } else if type == self.messageTypeUser {
-                self.handleConnectUser(messageBody)
-            } else if type == self.messageTypeAck {
-                stopPingTimer()
-            }
-        }
-    }
-    
-    internal func handleLoadingComplete() {
-        if self.loadedFunction != nil {
-            self.loadedFunction()
-        }
-        startPingTimer()
-    }
-    
+
     internal func startPingTimer() {
         if pingTimer != nil {
             pingTimer?.invalidate()
@@ -294,70 +198,110 @@ public class ConnectViewController: UIViewController, WKNavigationDelegate, WKUI
         }
     }
     
-    internal func handleConnectComplete(_ message: [String: Any]?) {
-        self.close()
-        if self.doneFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.doneFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.doneFunction(query)
-            } else {
-                self.doneFunction(nil)
-            }
-            
-        }
+    // MARK: - Event Handling functions
+    internal func handleLoadingComplete() {
+        self.delegate?.onLoad()
+        startPingTimer()
     }
     
-    internal func handleConnectCancel() {
+    internal func getDataDictFromMessage(_ message: [String: Any]?) -> NSDictionary? {
+        return message?["data"] as? NSDictionary ?? message?["query"] as? NSDictionary ?? nil
+    }
+    
+    internal func handleConnectComplete(_ message: [String: Any]?) {
         self.close()
-        if self.cancelFunction != nil {
-            self.cancelFunction()
-        }
+        self.delegate?.onDone(getDataDictFromMessage(message))
+    }
+    
+    internal func handleConnectCancel(_ message: [String: Any]?) {
+        self.close()
+        self.delegate?.onCancel(getDataDictFromMessage(message))
     }
     
     internal func handleConnectError(_ message: [String: Any]?) {
         self.close()
-        if self.errorFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.errorFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.errorFunction(query)
-            } else {
-                self.errorFunction(nil)
-            }
-        }
+        self.delegate?.onError(getDataDictFromMessage(message))
     }
     
     internal func handleConnectRoute(_ message: [String: Any]?) {
-        if self.routeFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.routeFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.routeFunction(query)
-            } else {
-                self.routeFunction(nil)
-            }
-        }
+        self.delegate?.onRoute(getDataDictFromMessage(message))
     }
     
     internal func handleConnectUser(_ message: [String: Any]?) {
-        if self.userFunction != nil {
-            if let data = message?["data"] as? NSDictionary {
-                self.userFunction(data)
-            } else if let query = message?["query"] as? NSDictionary {
-                self.userFunction(query)
-            } else {
-                self.userFunction(nil)
-            }
-        }
+        self.delegate?.onUser(getDataDictFromMessage(message))
     }
     
+    // MARK: - JailBroken functions
     internal func hasBeenJailBroken() -> Bool {
         let fileMgr = FileManager()
         if fileMgr.fileExists(atPath: "Applications/Cydia.app") || fileMgr.fileExists(atPath: "/Library/MobileSubstrate/MobileSubstrate.dylib") {
             return true
         }
-        
         return false
+    }
+}
+
+// MARK: - Webview Navigation Delegate functions
+extension ConnectViewController: WKNavigationDelegate {
+    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        if let host = navigationAction.request.url?.host {
+            if navigationController?.navigationBar.isHidden == false {
+                navigationItem.title = host
+            }
+        }
+        decisionHandler(.allow)
+    }
+}
+
+// MARK: - Webview UI Delegate functions
+extension ConnectViewController: WKUIDelegate {
+    public func webView(_ webView: WKWebView, createWebViewWith configuration: WKWebViewConfiguration, for navigationAction: WKNavigationAction, windowFeatures: WKWindowFeatures) -> WKWebView? {
+        // Triggered by window.open()
+        if navigationAction.targetFrame == nil {
+            self.loadChildWebView(url: (navigationAction.request.url)!)
+        }
+        return nil
+    }
+    
+    public func webViewDidClose(_ webView: WKWebView) {
+        self.handleConnectComplete(nil)
+    }
+}
+
+// MARK: - Interface for receiving messages from JavaScript
+extension ConnectViewController: WKScriptMessageHandler {
+    public func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
+        if let messageBody = message.body as? [String: Any], let type = messageBody["type"] as? String {
+            if type == ConnectEvents.URL.rawValue, let urlString = messageBody["url"] as? String {
+                if let url = URL(string: urlString) {
+                    self.loadChildWebView(url: url)
+                }
+            } else if type == ConnectEvents.ERROR.rawValue {
+                self.handleConnectError(messageBody)
+            } else if type == ConnectEvents.DONE.rawValue {
+                self.handleConnectComplete(messageBody)
+            } else if type == ConnectEvents.CANCEL.rawValue {
+                self.handleConnectCancel(messageBody)
+            } else if type == ConnectEvents.CLOSEPOPUP.rawValue {
+                self.unloadChildWebView()
+            } else if type == ConnectEvents.ROUTE.rawValue {
+                self.handleConnectRoute(messageBody)
+            } else if type == ConnectEvents.USER.rawValue {
+                self.handleConnectUser(messageBody)
+            } else if type == ConnectEvents.ACK.rawValue {
+                stopPingTimer()
+            }
+        }
+    }
+}
+
+// MARK: - Safari ViewController Delegate functions
+extension ConnectViewController: SFSafariViewControllerDelegate {
+    public func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        controller.dismiss(animated: true, completion: nil)
+
+        if self.isChildWebViewLoaded {
+            self.postWindowClosedMessage()
+        }
     }
 }
