@@ -2,7 +2,7 @@
 //  ConnectViewController.swift
 //  Connect
 //
-//  Copyright © 2020 finicity. All rights reserved.
+//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
 //
 
 import WebKit
