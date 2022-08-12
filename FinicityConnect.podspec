@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|
   spec.name         = "FinicityConnect"
   spec.module_name  = "Connect"
-  spec.version      = "1.3.1"
+  spec.version      = "1.3.0"
   spec.summary      = "Connect iOS SDK"
   spec.description  = <<-DESC
                       The Connect iOS SDK allows you to embed Finicity Connect anywhere you want within your own mobile applications.

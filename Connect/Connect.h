@@ -2,7 +2,7 @@
 //  Connect.h
 //  Connect
 //
-//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
+//  Copyright © 2020 finicity. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

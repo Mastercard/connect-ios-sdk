@@ -2,7 +2,7 @@
 //  ConnectTests.swift
 //  ConnectTests
 //
-//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
+//  Copyright © 2020 finicity. All rights reserved.
 //
 
 import XCTest

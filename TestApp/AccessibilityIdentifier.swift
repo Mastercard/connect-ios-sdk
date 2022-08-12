@@ -3,7 +3,7 @@
 //  TestApp
 //
 //  Created by Jimmie Wright on 12/15/20.
-//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
+//  Copyright © 2020 finicity. All rights reserved.
 //
 
 import Foundation
