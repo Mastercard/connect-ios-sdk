@@ -3,11 +3,11 @@
 //  TestAppUITests
 //
 //  Created by Jimmie Wright on 12/15/20.
-//  Copyright © 2020 finicity. All rights reserved.
+//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
 //
 
 import XCTest
-import FinicityConnect
+import MastercardOpenBankingConnect
 
 var dynamicGeneratedUrl: String? = nil
 let badExpiredUrl = "https://connect2.finicity.com?consumerId=dbceec20d8b97174e6aed204856f5a55&customerId=1016927519&partnerId=2445582695152&redirectUri=http%3A%2F%2Flocalhost%3A3001%2Fcustomers%2FredirectHandler&signature=abb1762e5c640f02823c56332daede3fe2f2143f4f5b8be6ec178ac72d7dbc5a&timestamp=1607806595887&ttl=1607813795887"
@@ -20,10 +20,10 @@ class TestAppUITests: XCTestCase {
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
 
-        // First time setup called try and dynamically generate a Connect URL using linked in static library FinicityConnect
+        // First time setup called try and dynamically generate a Connect URL using linked in static library Connect
         if dynamicGeneratedUrl == nil {
             let onGenerateExp = expectation(description: "generate url")
-            FinicityConnect.generateUrlLink { success, urlLink in
+            MastercardOpenBankingConnect.generateUrlLink { success, urlLink in
                 if success, let url = urlLink {
                     dynamicGeneratedUrl = url
                 }
