@@ -1,9 +1,0 @@
-# .slather.yml
-coverage_service: cobertura_xml
-xcodeproj: Connect.xcodeproj
-scheme: TestApp
-source_directory: Connect
-output_directory: sonar-reports
-build_directory: derivedData
-ignore:
-  - TestApp/*

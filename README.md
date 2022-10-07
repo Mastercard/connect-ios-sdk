@@ -1,5 +1,4 @@
-# Connect iOS SDK
-![pipeline status](https://gitlab.fini.city/connect/ios-sdk/badges/master/pipeline.svg)![coverage report](https://gitlab.fini.city/connect/ios-sdk/badges/master/coverage.svg)
+# Connect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
 
 ## Overview
 
@@ -9,7 +8,7 @@ The iOS SDK is distributed as a compiled binary in XCFramework format which allo
 
 The XCFramework format is Apple’s officially supported format for distributing binary libraries for multiple platforms and architectures in a single bundle.
 
-Additional documentation for the Connect iOS SDK can be found at [docs.finicity.com/connect-ios-sdk](https://docs.finicity.com/connect-ios-sdk/)
+Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking/staging/documentation/connect/mobile-sdks/#ios)
 
 ## Requirements
 
@@ -25,7 +24,7 @@ Connect iOS SDK can be installed as a [CocoaPod](https://cocoapods.org/). To ins
 ```
 use_frameworks!
 
-pod 'FinicityConnect'
+pod 'MastercardOpenBankingConnect'
 ```
 
 ### Manual
@@ -59,7 +58,7 @@ import Connect
     
     **Note:** The done, error, route, and user callback functions will have a **NSDictionary?** parameter that contains data about the event.
 
-3. Using a valid Connect URL and callback functions, create a ConnectViewConfig object.  See [Generate 2.0 Connect URL APIs](https://docs.finicity.com/migrate-to-connect-web-sdk-2-0/#migrate-connect-web-sdk-1)
+3. Using a valid Connect URL and callback functions, create a Connect URL.  See [Generate 2.0 Connect URL APIs](https://developer.mastercard.com/open-banking-connect/documentation/) (Used it as `generatedConnectURL` in example code below)
 4. Create an instance of the ConnectViewController class, providing the ConnectViewConfig class as input when calling its load method.
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
@@ -67,37 +66,68 @@ import Connect
 ### Example
 
 ```
-func openConnect(url: String) {
-    let config = ConnectViewConfig(connectUrl: url, loaded: self.connectLoaded, done: self.connectDone, cancel: self.connectCancelled, error: self.connectError, route: self.connectRoute, userEvent: self.connectUserEvent)
-    
-    self.connectViewController = ConnectViewController()
-    self.connectViewController.load(config: config)
+
+func openWebKitConnectView() {
+    if let connectUrl = generatedConnectURL {
+        print("creating & loading connectViewController")
+        self.connectViewController = ConnectViewController()
+        self.connectViewController.delegate = self
+        self.connectViewController.load(connectUrl)
+    } else {
+        print("no connect url provided.")
+        activityIndicator.stopAnimating()
+    }
 }
 
-func connectLoaded() {
+func displayData(_ data: NSDictionary?) {
+    print(data?.debugDescription ?? "no data in callback")
+}
+
+// Connect view controller delegate methods
+func onCancel(_ data: NSDictionary?) {
+    print("onCancel:")
+    displayData(data)
+    self.activityIndicator.stopAnimating()
+    // Needed to trigger deallocation of ConnectViewController
+    self.connectViewController = nil
+    self.connectNavController = nil
+}
+
+func onDone(_ data: NSDictionary?) {
+    print("onDone:")
+    displayData(data)
+    self.activityIndicator.stopAnimating()
+    // Needed to trigger deallocation of ConnectViewController
+    self.connectViewController = nil
+    self.connectNavController = nil
+}
+
+func onError(_ data: NSDictionary?) {
+    print("onError:")
+    displayData(data)
+    self.activityIndicator.stopAnimating()
+    // Needed to trigger deallocation of ConnectViewController
+    self.connectViewController = nil
+    self.connectNavController = nil
+}
+
+func onLoad() {
+    print("onLoad:")
     self.connectNavController = UINavigationController(rootViewController: self.connectViewController)
     self.connectNavController.modalPresentationStyle = .automatic
-    self.present(self.connectNavController, animated: false)
+    self.connectNavController.isModalInPresentation = true
+    self.connectNavController.presentationController?.delegate = self
+    self.present(self.connectNavController, animated: true)
 }
 
-func connectDone(_ data: NSDictionary?) {
-    // Connect flow completed
+func onRoute(_ data: NSDictionary?) {
+    print("onRoute:")
+    displayData(data)
 }
 
-func connectCancelled() {
-    // Connect flow exited prematurely
-}
-
-func connectError(_ data: NSDictionary?) {
-    // Error encountered in Connect flow
-}
-
-func connectRoute(_data: NSDictionary?) {
-    // Connect route changed
-}
- 
-func connectUserEvent(_ data: NSDictionary?) {
-    // Connect user event fired in response to user action
+func onUser(_ data: NSDictionary?) {
+    print("onUser:")
+    displayData(data)
 }
 
 ```
