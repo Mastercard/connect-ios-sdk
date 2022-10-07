@@ -2,7 +2,7 @@
 //  ViewController.swift
 //  ConnectWrapper
 //
-//  Copyright © 2020 MastercardOpenBanking. All rights reserved.
+//  Copyright © 2022 MastercardOpenBanking. All rights reserved.
 //
 
 import UIKit
