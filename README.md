@@ -1,8 +1,8 @@
-# Connect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
+# MastercardOpenBankingConnect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
 
 ## Overview
 
-The Connect iOS SDK allows you to embed our Finicity Connect application anywhere you want within your own mobile applications.
+The MastercardOpenBankingConnect iOS SDK allows you to embed our Mastercard Connect application anywhere you want within your own mobile applications.
 
 The iOS SDK is distributed as a compiled binary in XCFramework format which allows you to easily integrate our SDK into your development projects.  Our iOS SDK has full bitcode support so that you don’t have to disable bitcode in your applications when integrating with our SDK.
 
@@ -67,73 +67,44 @@ import Connect
 
 ```
 
-func openWebKitConnectView() {
-    if let connectUrl = generatedConnectURL {
-        print("creating & loading connectViewController")
-        self.connectViewController = ConnectViewController()
-        self.connectViewController.delegate = self
-        self.connectViewController.load(connectUrl)
-    } else {
-        print("no connect url provided.")
-        activityIndicator.stopAnimating()
-    }
+func openConnect(url: String) {
+    let config = ConnectViewConfig(connectUrl: url, loaded: self.connectLoaded, done: self.connectDone, cancel: self.connectCancelled, error: self.connectError, route: self.connectRoute, userEvent: self.connectUserEvent)
+    
+    self.connectViewController = ConnectViewController()
+    self.connectViewController.load(config: config)
 }
 
-func displayData(_ data: NSDictionary?) {
-    print(data?.debugDescription ?? "no data in callback")
-}
-
-// Connect view controller delegate methods
-func onCancel(_ data: NSDictionary?) {
-    print("onCancel:")
-    displayData(data)
-    self.activityIndicator.stopAnimating()
-    // Needed to trigger deallocation of ConnectViewController
-    self.connectViewController = nil
-    self.connectNavController = nil
-}
-
-func onDone(_ data: NSDictionary?) {
-    print("onDone:")
-    displayData(data)
-    self.activityIndicator.stopAnimating()
-    // Needed to trigger deallocation of ConnectViewController
-    self.connectViewController = nil
-    self.connectNavController = nil
-}
-
-func onError(_ data: NSDictionary?) {
-    print("onError:")
-    displayData(data)
-    self.activityIndicator.stopAnimating()
-    // Needed to trigger deallocation of ConnectViewController
-    self.connectViewController = nil
-    self.connectNavController = nil
-}
-
-func onLoad() {
-    print("onLoad:")
+func connectLoaded() {
     self.connectNavController = UINavigationController(rootViewController: self.connectViewController)
     self.connectNavController.modalPresentationStyle = .automatic
-    self.connectNavController.isModalInPresentation = true
-    self.connectNavController.presentationController?.delegate = self
-    self.present(self.connectNavController, animated: true)
+    self.present(self.connectNavController, animated: false)
 }
 
-func onRoute(_ data: NSDictionary?) {
-    print("onRoute:")
-    displayData(data)
+func connectDone(_ data: NSDictionary?) {
+    // Connect flow completed
 }
 
-func onUser(_ data: NSDictionary?) {
-    print("onUser:")
-    displayData(data)
+func connectCancelled() {
+    // Connect flow exited prematurely
 }
+
+func connectError(_ data: NSDictionary?) {
+    // Error encountered in Connect flow
+}
+
+func connectRoute(_data: NSDictionary?) {
+    // Connect route changed
+}
+ 
+func connectUserEvent(_ data: NSDictionary?) {
+    // Connect user event fired in response to user action
+}
+
 
 ```
 ### ConnectWrapper Swift Sample App
 
 This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
 
-[connect-sdk-version]: https://img.shields.io/cocoapods/v/FinicityConnect
-[connect-sdk-url]: https://cocoapods.org/pods/FinicityConnect
+[connect-sdk-version]: (https://img.shields.io/cocoapods/v/MastercardOpenBankingConnect.svg?style=flat)](https://cocoapods.org/pods/MastercardOpenBankingConnect)
+[connect-sdk-url]: https://cocoapods.org/pods/MastercardOpenBankingConnect
