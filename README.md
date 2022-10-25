@@ -44,17 +44,17 @@ pod 'MastercardOpenBankingConnect'
 import UIKit
 import Connect
 ```
-2. Create callback functions for loaded, done, cancel, error, route, and user events.    
+2. Create callback/delegate functions for loaded, done, cancel, error, route, and user events.    
     These callbacks correspond to the following events in Connect's data flow:
 
     | Event | Description |
     | ------ | ------ |
-    | loaded | Called when the Connect web page is loaded and ready to display. |
-    | done | Called when the user successfully completes the Connect application. It also has an unlabeled NSDictionary? parameter containing event information. |
-    | cancel | Called when the user cancels the Connect application. |
-    | error | Called when an error occurs while the user is using the Connect application. The unlabeled NSDictionary? parameter contains event information. |
-    | route | Called with the user is navigating through the screens of the Connect application. The unlabeled NSDictionary? parameter containing event information. |
-    | user | Connect 2.0 (only)  Called when a user performs an action. User events provide visibility into what action a user could take within the Connect application. The unlabeled NSDictionary? parameter contains event information. |
+    | onLoad | Called when the Connect web page is loaded and ready to display. |
+    | onDone | Called when the user successfully completes the Connect application. It also has an unlabeled NSDictionary? parameter containing event information. |
+    | onCancel | Called when the user cancels the Connect application. |
+    | onError | Called when an error occurs while the user is using the Connect application. The unlabeled NSDictionary? parameter contains event information. |
+    | onRoute | Called with the user is navigating through the screens of the Connect application. The unlabeled NSDictionary? parameter containing event information. |
+    | onUser | Connect 2.0 (only)  Called when a user performs an action. User events provide visibility into what action a user could take within the Connect application. The unlabeled NSDictionary? parameter contains event information. |
     
     **Note:** The done, error, route, and user callback functions will have a **NSDictionary?** parameter that contains data about the event.
 
