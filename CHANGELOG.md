@@ -1,15 +1,17 @@
 # Connect iOS SDK ChangeLog
 
-## Version 1.3.1 - 2021-01-07
 
+## Version 1.4.0 - 2023-05-30
 ### Changes
-- Fixed memory leak in ConnectViewController caused by retain cycle.
-- Enhanced UI in Connect Wrapper demo app.
+- Upadated version.
 
-## Version 1.3.0 - 2020-12-04
 
+## Version 0.1.0 - 2022-10-25
 ### Changes
 - Initial release to CocoaPods.
 - Connect iOS SDK distributed in xcframework binary format to make it easier to integrate with our SDK.
 - Enabled bitcode support.
 - Added API sdkVersion() to return the current SDK version in semantic versioning string format.
+- Fixed memory leak in ConnectViewController caused by retain cycle.
+- Enhanced UI in Connect Wrapper demo app.
+- Added changes to receive event updates from delegate methods. 
