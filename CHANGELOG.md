@@ -1,7 +1,7 @@
 # Connect iOS SDK ChangeLog
 
 
-## Version 1.4.0 - 2023-05-30
+## Version 2.0.0 - 2023-05-30
 ### Changes
 - Upadated version.
 
