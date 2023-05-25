@@ -56,7 +56,7 @@ import Connect
     | onRoute | Called with the user is navigating through the screens of the Connect application. The unlabeled NSDictionary? parameter containing event information. |
     | onUser | Connect 2.0 (only)  Called when a user performs an action. User events provide visibility into what action a user could take within the Connect application. The unlabeled NSDictionary? parameter contains event information. |
     
-    **Note:** The done, error, route, and user callback functions will have a **NSDictionary?** parameter that contains data about the event.
+    **Note:** The onDone, onError, onRoute, and onUser callback functions will have a **NSDictionary?** parameter that contains data about the event.
 
 3. Using a valid Connect URL and callback functions, create a Connect URL.  See [Generate 2.0 Connect URL APIs](https://developer.mastercard.com/open-banking-us/documentation/connect/generate-2-connect-url-apis/) (Used it as `generatedConnectURL` in example code below)
 4. Create an instance of the ConnectViewController class, providing the ConnectViewConfig class as input when calling its load method.
