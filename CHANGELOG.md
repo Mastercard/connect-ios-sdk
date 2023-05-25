@@ -3,7 +3,7 @@
 
 ## Version 2.0.0 - 2023-05-30
 ### Changes
-- Upadated version.
+- Added fix for typed text not visible in text area provided in Connect Wrapper demo app.
 
 
 ## Version 0.1.0 - 2022-10-25
