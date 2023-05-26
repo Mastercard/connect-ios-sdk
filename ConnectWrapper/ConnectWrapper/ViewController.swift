@@ -136,7 +136,11 @@ extension ViewController: ConnectEventDelegate {
     func onLoad() {
         print("onLoad:")
         self.connectNavController = UINavigationController(rootViewController: self.connectViewController)
-        self.connectNavController.modalPresentationStyle = .automatic
+        if(UIDevice.current.userInterfaceIdiom == .phone){
+            self.connectNavController.modalPresentationStyle = .fullScreen
+        }else{
+            self.connectNavController.modalPresentationStyle = .automatic
+        }
         self.connectNavController.isModalInPresentation = true
         self.connectNavController.presentationController?.delegate = self
         self.present(self.connectNavController, animated: true)
