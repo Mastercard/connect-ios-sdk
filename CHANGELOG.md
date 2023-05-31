@@ -1,5 +1,11 @@
 # Connect iOS SDK ChangeLog
 
+
+## Version 2.0.0 - 2023-05-30
+### Changes
+- Added fix for typed text not visible in text area provided in Connect Wrapper demo app.
+
+
 ## Version 1.3.1 - 2021-01-07
 
 ### Changes
