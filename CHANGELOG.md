@@ -1,6 +1,10 @@
 # Connect iOS SDK ChangeLog
 
 
+## Version 2.1.0 - 2023-06-12
+### Changes
+- Added support for App to App deeplink navigation for external (Partner's) App OAuth flow.
+
 ## Version 2.0.0 - 2023-05-30
 ### Changes
 - Added fix for typed text not visible in text area provided in Connect Wrapper demo app.
