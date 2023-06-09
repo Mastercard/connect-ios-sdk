@@ -6,6 +6,6 @@ framework module Connect {
 }
 
 module Connect.Swift {
-    header "Connect-Swift.h"
-    requires objc
+  header "Connect-Swift.h"
+  requires objc
 }
