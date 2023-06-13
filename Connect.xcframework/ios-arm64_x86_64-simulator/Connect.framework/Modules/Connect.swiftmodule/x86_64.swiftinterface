@@ -6,8 +6,12 @@ import Foundation
 import LocalAuthentication
 import SafariServices
 import Swift
+import UIKit
 import WebKit
 import _Concurrency
+@_hasMissingDesignatedInitializers public class OpenLink {
+  @objc deinit
+}
 public func sdkVersion() -> Swift.String
 public protocol ConnectEventDelegate : AnyObject {
   func onCancel(_ data: Foundation.NSDictionary?)
@@ -23,7 +27,7 @@ public protocol ConnectEventDelegate : AnyObject {
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewDidLoad()
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillAppear(_ animated: Swift.Bool)
   @_Concurrency.MainActor(unsafe) @objc override dynamic public func viewWillDisappear(_ animated: Swift.Bool)
-  @_Concurrency.MainActor(unsafe) public func load(_ connectUrl: Swift.String)
+  @_Concurrency.MainActor(unsafe) public func load(_ connectUrl: Swift.String, deepLinkUrl: Swift.String? = nil)
   @_Concurrency.MainActor(unsafe) public func unload()
   @_Concurrency.MainActor(unsafe) public func close()
   @objc override dynamic public func observeValue(forKeyPath keyPath: Swift.String?, of object: Any?, change: [Foundation.NSKeyValueChangeKey : Any]?, context: Swift.UnsafeMutableRawPointer?)

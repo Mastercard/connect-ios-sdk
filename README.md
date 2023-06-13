@@ -59,9 +59,13 @@ import Connect
     **Note:** The onDone, onError, onRoute, and onUser callback functions will have a **NSDictionary?** parameter that contains data about the event.
 
 3. Using a valid Connect URL and callback functions, create a Connect URL.  See [Generate 2.0 Connect URL APIs](https://developer.mastercard.com/open-banking-us/documentation/connect/generate-2-connect-url-apis/) (Used it as `generatedConnectURL` in example code below)
-4. Create an instance of the ConnectViewController class, providing the ConnectViewConfig class as input when calling its load method.
+4. Create an instance of the ConnectViewController class and Assign ConnectEventDelegate to ConnectViewController..
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
+
+**Note:** : If end user wants to use App to App functionality Please replace the line no 14 self.connectViewController.load(connectUrl!) with self.connectViewController.load(connectUrl,deepLinkUrl: "partnersdeeplinkurl://")
+
+***partnersdeeplinkurl*** is end user’s app’s deep link (must be in lowercase) from which app is getting launched when connect flow is completed, partner needs to register its deep link in their projects info.plist files. Apple doc for this Defining a custom URL scheme for your app | Apple Developer Documentation 
 
 ### Example
 
