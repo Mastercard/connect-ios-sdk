@@ -65,7 +65,7 @@ import Connect
 
 **Note:** : If end user wants to use App to App functionality Please replace the line no 14 self.connectViewController.load(connectUrl!) with self.connectViewController.load(connectUrl,deepLinkUrl: "partnersdeeplinkurl://")
 
-***partnersdeeplinkurl*** is end user’s app’s deep link from which app is getting launched when connect flow is completed, partner needs to register its deep link in their projects info.plist files. Apple doc for this Defining a custom URL scheme for your app | Apple Developer Documentation 
+***partnersdeeplinkurl*** is end user’s app’s deep link (must be in lowercase) from which app is getting launched when connect flow is completed, partner needs to register its deep link in their projects info.plist files. Apple doc for this Defining a custom URL scheme for your app | Apple Developer Documentation 
 
 ### Example
 
