@@ -1,7 +1,7 @@
 # Connect iOS SDK ChangeLog
 
 
-## Version 2.1.0 - 2023-06-12
+## Version 2.1.0 - 2023-06-13
 ### Changes
 - Added support for App to App deeplink navigation for external (Partner's) App OAuth flow.
 
