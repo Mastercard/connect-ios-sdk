@@ -63,9 +63,21 @@ import Connect
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
 
-**Note:** : If end user wants to use App to App functionality Please replace the line no 14 self.connectViewController.load(connectUrl!) with self.connectViewController.load(connectUrl,deepLinkUrl: "partnersdeeplinkurl://")
+**Note:**SDK support for deepLinkUrl parameter is deprecated from iOS sdk version 3.0.0, Please use redirectUrl parameter instead
 
-***partnersdeeplinkurl*** is end user’s app’s deep link (must be in lowercase) from which app is getting launched when connect flow is completed, partner needs to register its deep link in their projects info.plist files. Apple doc for this Defining a custom URL scheme for your app | Apple Developer Documentation 
+### App to App Authentication flow: Passing of redirectUrl - For App to App functional flow only
+In order to have the best app to app authentication experience, you should send a universal link URL in the redirect URL parameter shown in example below. We do not recommend utilizing the custom URL scheme (i.e. deep link). If you would like to learn more about app to app authentication, please refer the following section, 
+
+Universal link Example → self.connectViewController.load(connectUrl,redirectUrl: "https://app.example.com/mastercardConnect")
+Universal link Example Explanation -> https://app.example.com/mastercardConnect is the universal link configured for partner's app.
+
+
+Deep Link Example → self.connectViewController.load(connectUrl,redirectUrl: "deeplinkurl://")
+Deep link Example Explanation ->  deeplinkurl is the partner’s app’s deep link (must be in lowercase) from which the partner app is getting launched when connect flow is completed, the partner needs to register its deep link in their project's info.plist files. Please find apple documentation here https://developer.apple.com/documentation/xcode/defining-a-custom-url-scheme-for-your-app 
+
+**Note:** We strongly recommend utilizing the Universal Link. Utilizing a deepLinkUrl will also trigger a UI/alert on a user’s apple device that will add friction to the user experience. The UI alert asks if the end user is sure if they would like to be redirected back to the partner's app. 
+
+
 
 ### Example
 
