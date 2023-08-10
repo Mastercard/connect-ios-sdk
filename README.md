@@ -177,14 +177,39 @@ For information on how to create a [Universal Links](https://developer.apple.com
 In order to return control back to your application after a customer completes a FI’s OAuth flow, you must specify a redirectUrl, which will be the URL from which Connect will be re-launched for a customer to complete the Connect experience.
 
 Here is an example of a universal link redirectUrl within your code: ```self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")```
-
 For information on how to configure your server see [supporting associated domains](https://developer.apple.com/documentation/xcode/supporting-associated-domains)
 
-
-
 ### ConnectWrapper Swift Sample App
-
 This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
+
+
+##Migrate From Framework to XCFramework
+The Connect iOS SDK uses the XCFramework format which allows you to easily integrate the SDK into your development projects. Our iOS SDK has full bitcode support so that you don’t have to disable bitcode in your applications.
+
+###Delete Connect.framework from your project
+If you’re currently using framework in your projects, then you need to remove it before you start using the XCFramework. This ensures that the connect.framework won’t interfere with the new XCFramework while you’re trying to compile your source code.
+
+**WARNING:** Before deleting your existing framework, test the new XCFramework, and make sure it is working correctly so that you don’t accidentally delete your source files.
+1. Open your project in Xcode.
+2. Click the General tab.
+3. Scroll down to the Frameworks, Libraries, and Embedded Content section.
+4. Select connect.framework.
+5. To delete the framework, click (–) minus.
+
+###Remove the Connect.framework reference
+1. From Project Navigator on the left pane, select Framework and press Delete.
+2. Click Remove Reference (recommended) Note: This is the safest option to preserve your source files.
+
+###Remove run script
+If you’ve incorporated our script for stripping out the X86 simulator before submitting your application to the Apple App Store, you can remove the run script. It’s no longer needed with the XCFramework. Only customers that create a run script to incorporate with the connect-sdk-iOS-v1.2.0.zip need to do this step.
+
+1. From Xcode in the right pane, select your Targets.
+2. On the Build Phase tab, scroll down to Run Script
+3. To remove the script, click the x.
+
+Once you have migrated from the legacy framework to the new XCFramework, you can install the Connect iOS SDK via CocoaPods
 
 [connect-sdk-version]: (https://img.shields.io/cocoapods/v/MastercardOpenBankingConnect.svg?style=flat)](https://cocoapods.org/pods/MastercardOpenBankingConnect)
 [connect-sdk-url]: https://cocoapods.org/pods/MastercardOpenBankingConnect
+
+
