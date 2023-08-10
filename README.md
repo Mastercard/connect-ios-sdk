@@ -1,8 +1,8 @@
-# MastercardOpenBankingConnect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
+# Connect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
 
 ## Overview
 
-The MastercardOpenBankingConnect iOS SDK allows you to embed our Mastercard Connect application anywhere you want within your own mobile applications.
+The Connect iOS SDK allows you to embed our Mastercard Connect application anywhere you want within your own mobile applications.
 
 The iOS SDK is distributed as a compiled binary in XCFramework format which allows you to easily integrate our SDK into your development projects.  Our iOS SDK has full bitcode support so that you don’t have to disable bitcode in your applications when integrating with our SDK.
 
@@ -95,7 +95,7 @@ import Connect
     }
     
     
-    // MastercardOpenBankingConnect Delegate Methods
+    // Connect Delegate Methods
     func onCancel(_ data: NSDictionary?) {
         print("onCancel:")
         displayData(data)
@@ -158,8 +158,8 @@ import Connect
 
 **Note**: The onDone, onError, onRoute, and onUser callback functions will have a NSDictionary? parameter that contains data about the event.
 
-## App to App Authentication Setup
-To provide the best app to app authentication experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
+## App to App Setup
+To provide the best app to app experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
 
 Before installing the Connect iOS SDK for use with app to app authentication please complete the following.
 
@@ -167,7 +167,7 @@ Before installing the Connect iOS SDK for use with app to app authentication ple
 For information on how to create a [Universal Links](https://developer.apple.com/ios/universal-links/) to be used as redirectUrl in your application, see [Apple’s Allowing apps and websites to link to your content](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content) for details.
 
 >**NOTE:**
->In order to provide the best app to app authentication customer experience, Partners should use a universal link as a redirectUrl.
+>In order to provide the best app to app customer experience, Partners should use a universal link as a redirectUrl.
 
 >It is not recommended to create deep links (custom URL schemes) as redirectUrl since they lack the security of Universal Links through the two-way association between your app and your website. A deep link will also trigger an alert on iOS devices that can add friction to the customer experience, requesting permission to redirect back to the Partner’s app.
 
@@ -178,6 +178,8 @@ In order to return control back to your application after a customer completes a
 
 Here is an example of a universal link redirectUrl within your code: ```self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")```
 For information on how to configure your server see [supporting associated domains](https://developer.apple.com/documentation/xcode/supporting-associated-domains)
+
+Here is an example of a deep link redirectUrl within your code (Not Recommended): ```self.connectViewController.load(connectUrl,redirectUrl: "deeplinkurl://")```
 
 ### ConnectWrapper Swift Sample App
 This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
