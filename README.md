@@ -14,6 +14,8 @@ Additional documentation for the Connect iOS SDK can be found at (https://develo
 
 The Connect iOS SDK supports iOS 11 or later.
 
+> **Warning**: Support for deepLinkUrl parameters is deprecated from Connect iOS SDK version 3.0.0, going forward please use the redirectUrl parameter which supports both universal and deep links. 
+
 ## App to App Authentication Setup
 To provide the best app to app authentication experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
 
@@ -85,8 +87,6 @@ import Connect
 4. Create an instance of the ConnectViewController class and Assign ConnectEventDelegate to ConnectViewController..
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
-
-> **WARNING**: Support for deepLinkUrl parameters is deprecated from Connect iOS SDK version 3.0.0, going forward please use the redirectUrl parameter which supports both universal and deep links. 
 
 
 
