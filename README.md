@@ -189,7 +189,8 @@ The Connect iOS SDK uses the XCFramework format which allows you to easily integ
 ### Delete Connect.framework from your project
 If you’re currently using framework in your projects, then you need to remove it before you start using the XCFramework. This ensures that the connect.framework won’t interfere with the new XCFramework while you’re trying to compile your source code.
 
-**WARNING:** Before deleting your existing framework, test the new XCFramework, and make sure it is working correctly so that you don’t accidentally delete your source files.
+>**WARNING:** Before deleting your existing framework, test the new XCFramework, and make sure it is working correctly so that you don’t accidentally delete your source files.
+
 1. Open your project in Xcode.
 2. Click the General tab.
 3. Scroll down to the Frameworks, Libraries, and Embedded Content section.
