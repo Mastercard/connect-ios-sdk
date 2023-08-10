@@ -3,10 +3,10 @@
 ## Version 3.0.0 - 2023-10-10
 
 ### Enhancements
-- Newly added redirectUrl parameter inside SDK to support universal link and deeplink, It will enhance app to app seamless communication.
+- Newly added redirectUrl parameter inside Connect iOS SDK to support universal link and deeplink for navigation between mobile apps, It will help in enhancing App to App seamless communication.
 
 ### Breaking changes
-- SDK support for deepLinkUrl is deprecated, Please use redirectUrl parameter instead, it will support both universal link and deeplink. Please follow readme documentation.  https://github.com/Mastercard/connect-ios-sdk/blob/main/README.md
+- Connect iOS SDK support for deepLinkUrl is deprecated from this version, Please use the redirectUrl parameter instead, it will support both universal link and deeplink. Please follow the readme for more details https://github.com/Mastercard/connect-ios-sdk/blob/main/README.md
 
 ## Version 2.1.0 - 2023-06-13
 ### Changes

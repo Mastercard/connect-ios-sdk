@@ -63,7 +63,7 @@ import Connect
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
 
-**Note:**SDK support for deepLinkUrl parameter is deprecated from iOS sdk version 3.0.0, Please use redirectUrl parameter instead
+**Note:** Connect iOS SDK support for deepLinkUrl parameter is deprecated from version 3.0.0, Please use redirectUrl parameter instead for App to App.
 
 ### App to App Authentication flow: Passing of redirectUrl - For App to App functional flow only
 In order to have the best app to app authentication experience, you should send a universal link URL in the redirect URL parameter shown in example below. We do not recommend utilizing the custom URL scheme (i.e. deep link). If you would like to learn more about app to app authentication, please refer the following section, 
