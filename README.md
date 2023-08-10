@@ -91,11 +91,18 @@ Deep link Example Explanation ->  deeplinkurl is the partner’s app’s deep li
     var connectNavController: UINavigationController!
     var connectUrl: String?
     
-    // 
+   // For regular Connect flow use below openConnect function
     func openConnect(connectUrl: String) {
-        self.connectViewController = ConnectViewController()
-        self.connectViewController.delegate = self
-        self.connectViewController.load(connectUrl!)
+      self.connectViewController = ConnectViewController()
+      self.connectViewController.delegate = self
+      self.connectViewController.load(connectUrl!)
+    }
+
+   // For App to App Connect flow use below openConnect function
+    func openConnect(connectUrl: String) {
+      self.connectViewController = ConnectViewController()
+      self.connectViewController.delegate = self
+      self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/connect")
     }
     
     
@@ -159,6 +166,10 @@ Deep link Example Explanation ->  deeplinkurl is the partner’s app’s deep li
 
 
 ```
+
+**Note**: The onDone, onError, onRoute, and onUser callback functions will have a NSDictionary? parameter that contains data about the event.
+
+
 ### ConnectWrapper Swift Sample App
 
 This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
