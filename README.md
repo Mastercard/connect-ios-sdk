@@ -78,7 +78,7 @@ For information on how to create a [Universal Links](https://developer.apple.com
 ### Configuring your redirectUrl
 In order to return control back to your application after a customer completes a FI’s OAuth flow, you must specify a redirectUrl, which will be the URL from which Connect will be re-launched for a customer to complete the Connect experience.
 
-Here is an example of a universal link redirectUrl within your code: self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")
+Here is an example of a universal link redirectUrl within your code: ```self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")```
 
 For information on how to configure your server see supporting associated domains
 
