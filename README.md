@@ -16,28 +16,6 @@ The Connect iOS SDK supports iOS 11 or later.
 
 > **Warning**: Support for deepLinkUrl parameters is deprecated from Connect iOS SDK version 3.0.0, going forward please use the redirectUrl parameter which supports both universal and deep links. 
 
-## App to App Authentication Setup
-To provide the best app to app authentication experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
-
-Before installing the Connect iOS SDK for use with app to app authentication please complete the following.
-
-### Create your domain’s redirectUrl
-For information on how to create a [Universal Links](https://developer.apple.com/ios/universal-links/) to be used as redirectUrl in your application, see [Apple’s Allowing apps and websites to link to your content](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content) for details.
-
->**NOTE:**
->In order to provide the best app to app authentication customer experience, Partners should use a universal link as a redirectUrl.
-
->It is not recommended to create deep links (custom URL schemes) as redirectUrl since they lack the security of Universal Links through the two-way association between your app and your website. A deep link will also trigger an alert on iOS devices that can add friction to the customer experience, requesting permission to redirect back to the Partner’s app.
-
->Any application can register custom URL schemes and there is no further validation from iOS. If multiple applications have registered the same custom URL scheme, a different application may be launched each time the URL is opened. To complete OAuth flows, it is important that your application is opened and not any arbitrary application that has registered the same URL scheme.
-
-### Configuring your redirectUrl
-In order to return control back to your application after a customer completes a FI’s OAuth flow, you must specify a redirectUrl, which will be the URL from which Connect will be re-launched for a customer to complete the Connect experience.
-
-Here is an example of a universal link redirectUrl within your code: ```self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")```
-
-For information on how to configure your server see [supporting associated domains](https://developer.apple.com/documentation/xcode/supporting-associated-domains)
-
 
 ## Installation
 
@@ -179,6 +157,29 @@ import Connect
 ```
 
 **Note**: The onDone, onError, onRoute, and onUser callback functions will have a NSDictionary? parameter that contains data about the event.
+
+## App to App Authentication Setup
+To provide the best app to app authentication experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
+
+Before installing the Connect iOS SDK for use with app to app authentication please complete the following.
+
+### Create your domain’s redirectUrl
+For information on how to create a [Universal Links](https://developer.apple.com/ios/universal-links/) to be used as redirectUrl in your application, see [Apple’s Allowing apps and websites to link to your content](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content) for details.
+
+>**NOTE:**
+>In order to provide the best app to app authentication customer experience, Partners should use a universal link as a redirectUrl.
+
+>It is not recommended to create deep links (custom URL schemes) as redirectUrl since they lack the security of Universal Links through the two-way association between your app and your website. A deep link will also trigger an alert on iOS devices that can add friction to the customer experience, requesting permission to redirect back to the Partner’s app.
+
+>Any application can register custom URL schemes and there is no further validation from iOS. If multiple applications have registered the same custom URL scheme, a different application may be launched each time the URL is opened. To complete OAuth flows, it is important that your application is opened and not any arbitrary application that has registered the same URL scheme.
+
+### Configuring your redirectUrl
+In order to return control back to your application after a customer completes a FI’s OAuth flow, you must specify a redirectUrl, which will be the URL from which Connect will be re-launched for a customer to complete the Connect experience.
+
+Here is an example of a universal link redirectUrl within your code: ```self.connectViewController.load(connectUrl,redirectUrl: "https://yourdomain.com/mastercardConnect")```
+
+For information on how to configure your server see [supporting associated domains](https://developer.apple.com/documentation/xcode/supporting-associated-domains)
+
 
 
 ### ConnectWrapper Swift Sample App
