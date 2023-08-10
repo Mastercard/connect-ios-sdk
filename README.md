@@ -66,11 +66,13 @@ import Connect
 **Note:** Connect iOS SDK support for deepLinkUrl parameter is deprecated from version 3.0.0, Please use redirectUrl parameter instead for App to App.
 
 ### Create your domain’s redirectUrl
-For information on how to create a Universal Links to be used as redirectUrl in your application, see Apple’s Allowing apps and websites to link to your content for details.
+For information on how to create a [Universal Links](https://developer.apple.com/ios/universal-links/) to be used as redirectUrl in your application, see [Apple’s Allowing apps and websites to link to your content](https://developer.apple.com/documentation/xcode/allowing-apps-and-websites-to-link-to-your-content) for details.
 
 >**NOTE:**
 >In order to provide the best app to app authentication customer experience, Partners should use a universal link as a redirectUrl.
+
 >It is not recommended to create deep links (custom URL schemes) as redirectUrl since they lack the security of Universal Links through the two-way association between your app and your website. A deep link will also trigger an alert on iOS devices that can add friction to the customer experience, requesting permission to redirect back to the Partner’s app.
+
 >Any application can register custom URL schemes and there is no further validation from iOS. If multiple applications have registered the same custom URL scheme, a different application may be launched each time the URL is opened. To complete OAuth flows, it is important that your application is opened and not any arbitrary application that has registered the same URL scheme.
 
 ### Configuring your redirectUrl
