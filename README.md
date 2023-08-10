@@ -183,10 +183,10 @@ For information on how to configure your server see [supporting associated domai
 This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
 
 
-##Migrate From Framework to XCFramework
+## Migrate From Framework to XCFramework
 The Connect iOS SDK uses the XCFramework format which allows you to easily integrate the SDK into your development projects. Our iOS SDK has full bitcode support so that you don’t have to disable bitcode in your applications.
 
-###Delete Connect.framework from your project
+### Delete Connect.framework from your project
 If you’re currently using framework in your projects, then you need to remove it before you start using the XCFramework. This ensures that the connect.framework won’t interfere with the new XCFramework while you’re trying to compile your source code.
 
 **WARNING:** Before deleting your existing framework, test the new XCFramework, and make sure it is working correctly so that you don’t accidentally delete your source files.
@@ -196,11 +196,11 @@ If you’re currently using framework in your projects, then you need to remove 
 4. Select connect.framework.
 5. To delete the framework, click (–) minus.
 
-###Remove the Connect.framework reference
+### Remove the Connect.framework reference
 1. From Project Navigator on the left pane, select Framework and press Delete.
 2. Click Remove Reference (recommended) Note: This is the safest option to preserve your source files.
 
-###Remove run script
+### Remove run script
 If you’ve incorporated our script for stripping out the X86 simulator before submitting your application to the Apple App Store, you can remove the run script. It’s no longer needed with the XCFramework. Only customers that create a run script to incorporate with the connect-sdk-iOS-v1.2.0.zip need to do this step.
 
 1. From Xcode in the right pane, select your Targets.
