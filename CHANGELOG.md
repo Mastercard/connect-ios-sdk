@@ -1,5 +1,12 @@
 # Connect iOS SDK ChangeLog
 
+## Version 3.0.0 - 2023-10-10
+
+### Enhancements
+- Enhanced App To App OAuth Flow with newly added redirectUrl parameter inside Connect iOS SDK to support universal link and deeplink for navigation between mobile apps. For details on App To App refer [documentation here](https://developer.mastercard.com/open-banking-us/documentation/connect/mobile-sdks/).
+
+### Breaking changes
+- Connect iOS SDK support for deepLinkUrl is deprecated from this version, Please use the redirectUrl parameter instead, it will support both universal link and deeplink. Please follow the readme for [more details](https://github.com/Mastercard/connect-ios-sdk/blob/main/README.md)
 
 ## Version 2.1.0 - 2023-06-13
 ### Changes
