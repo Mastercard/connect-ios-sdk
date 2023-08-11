@@ -61,7 +61,7 @@ import Connect
     
     **Note:** The onDone, onError, onRoute, and onUser callback functions will have a **NSDictionary?** parameter that contains data about the event.
 
-3. Using a valid Connect URL and callback functions, create a Connect URL.  See [Generate 2.0 Connect URL APIs](https://developer.mastercard.com/open-banking-us/documentation/connect/generate-2-connect-url-apis/) (Used it as `generatedConnectURL` in example code below)
+3. Using a valid Connect URL and callback functions, create a Connect URL.  See [Generate 2.0 Connect URL APIs](https://developer.mastercard.com/open-banking-us/documentation/connect/generate-2-connect-url-apis/) (Used as `connectUrl` in example code below)
 4. Create an instance of the ConnectViewController class and Assign ConnectEventDelegate to ConnectViewController..
 5. In the loaded callback, present the ConnectViewController using a UINavigationController with the ConnectViewController as its rootViewController.
 6. The ConnectViewController automatically dismisses when the Connect flow is completed, cancelled early by the user, or when an error is encountered.
@@ -159,7 +159,7 @@ import Connect
 **Note**: The onDone, onError, onRoute, and onUser callback functions will have a NSDictionary? parameter that contains data about the event.
 
 ## App to App Setup
-To provide the best app to app experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See here for more information on App to App authentication.
+To provide the best app to app experience for your customers, you should send a universal link URL in the redirect URL parameter when using Connect. See [here](https://developer.mastercard.com/drafts/open-banking-us/mobile-sdks/documentation/connect/mobile-sdks/#compatibility) for more information on App to App authentication.
 
 Before installing the Connect iOS SDK for use with app to app authentication please complete the following.
 
