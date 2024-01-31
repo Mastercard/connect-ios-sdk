@@ -34,11 +34,7 @@ pod 'MastercardOpenBankingConnect'
 
 1. Open your project in Xcode and drag the Connect.xcframework folder into your project.
 
-<img src="https://prod-findocs.s3-us-west-2.amazonaws.com/wp-content/uploads/2020/12/03124541/iOS_AddXCFramework.png" width=100%>
-
 2. In the build settings for your target, select the **General** tab, scroll down to the **Frameworks, Libraries, and Embedded Content**, and select Connect.xcframework.  Under the **Embed** column, select **Embed & Sign** from the menu drop-down list if is not already selected.
-
-<img src="https://prod-findocs.s3-us-west-2.amazonaws.com/wp-content/uploads/2020/12/03124538/iOS_EmbedSign.png" width=100%>
 
 ## Integration
 
