@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://developer.mastercard.com/open-banking-us/documentation/connect/mobile-sdks/#ios"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = "MastercardOpenBanking"
-  spec.platform     = :ios, "11.0"
+  spec.platform     = :ios, "14.0"
   spec.source       = { :git => "https://github.com/Mastercard/connect-ios-sdk.git", :tag => "#{spec.version}" }
   spec.ios.vendored_frameworks = "Connect.xcframework"
   spec.resource_bundles = {'MastercardOpenBankingConnect' => ['Source/*.xcprivacy']}
