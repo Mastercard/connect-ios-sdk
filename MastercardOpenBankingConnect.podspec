@@ -12,4 +12,5 @@ Pod::Spec.new do |spec|
   spec.platform     = :ios, "11.0"
   spec.source       = { :git => "https://github.com/Mastercard/connect-ios-sdk.git", :tag => "#{spec.version}" }
   spec.ios.vendored_frameworks = "Connect.xcframework"
+  spec.resource_bundles = {'MastercardOpenBankingConnect' => ['Source/*.xcprivacy']}
 end
