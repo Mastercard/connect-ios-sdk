@@ -10,7 +10,7 @@
 		</data>
 		<key>Headers/Connect.h</key>
 		<data>
-		6EfIg1zw/UGL2HRgd+wdvSx6qN4=
+		RswYSOX4dOY0WhBGXglSjncThq0=
 		</data>
 		<key>Info.plist</key>
 		<data>
@@ -18,7 +18,7 @@
 		</data>
 		<key>Modules/Connect.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<data>
-		sVVjQQ9Ok1RLtTLW0vmlzew4EUI=
+		C+V6irmP63MoPjmWjFfCQvVoKfw=
 		</data>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.abi.json</key>
 		<data>
@@ -66,22 +66,22 @@
 		<dict>
 			<key>hash</key>
 			<data>
-			6EfIg1zw/UGL2HRgd+wdvSx6qN4=
+			RswYSOX4dOY0WhBGXglSjncThq0=
 			</data>
 			<key>hash2</key>
 			<data>
-			32jM/EBcHyaFRwGcoJ3DUaSIMX1W29VNpz6BNVX6eo0=
+			KVXs3Ufm8MX9yaAZiEM8H5Ml74ctX9hxTaW7X1mVe/I=
 			</data>
 		</dict>
 		<key>Modules/Connect.swiftmodule/Project/arm64-apple-ios.swiftsourceinfo</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			sVVjQQ9Ok1RLtTLW0vmlzew4EUI=
+			C+V6irmP63MoPjmWjFfCQvVoKfw=
 			</data>
 			<key>hash2</key>
 			<data>
-			+Abd3NPluRiVpxsZuKMUxO6aOIECRnv/qc3ziRCqRAM=
+			r4XPfPlduLINZlJBCFyMMLVB9GaDw/5aPhBdG5j0vbc=
 			</data>
 		</dict>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.abi.json</key>
