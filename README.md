@@ -8,7 +8,7 @@ The iOS SDK is distributed as a compiled binary in XCFramework format which allo
 
 The XCFramework format is Apple’s officially supported format for distributing binary libraries for multiple platforms and architectures in a single bundle.
 
-Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/mobile-sdks/#ios)
+Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/integrating/)
 
 ## Requirements
 
