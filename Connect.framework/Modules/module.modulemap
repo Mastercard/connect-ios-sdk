@@ -1,0 +1,11 @@
+framework module Connect {
+  umbrella header "Connect.h"
+  export *
+
+  module * { export * }
+}
+
+module Connect.Swift {
+  header "Connect-Swift.h"
+  requires objc
+}
