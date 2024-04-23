@@ -8,11 +8,11 @@ The iOS SDK is distributed as a compiled binary in XCFramework format which allo
 
 The XCFramework format is Apple’s officially supported format for distributing binary libraries for multiple platforms and architectures in a single bundle.
 
-Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/integrating/)
+Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/mobile-sdks/#ios)
 
 ## Requirements
 
-The Connect iOS SDK supports iOS 14 or later.
+The Connect iOS SDK supports iOS 11 or later.
 
 > **Warning**: Support for deepLinkUrl parameters is deprecated from Connect iOS SDK version 3.0.0, going forward please use the redirectUrl parameter which supports both universal and deep links. 
 
