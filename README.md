@@ -1,6 +1,6 @@
 # Connect iOS SDK [![version][connect-sdk-version]][connect-sdk-url]
 
-## Overview
+## Overview  
 
 The Connect iOS SDK allows you to embed our Mastercard Connect application anywhere you want within your own mobile applications.
 
@@ -8,11 +8,11 @@ The iOS SDK is distributed as a compiled binary in XCFramework format which allo
 
 The XCFramework format is Apple’s officially supported format for distributing binary libraries for multiple platforms and architectures in a single bundle.
 
-Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/mobile-sdks/#ios)
+Additional documentation for the Connect iOS SDK can be found at (https://developer.mastercard.com/open-banking-us/documentation/connect/integrating/)
 
 ## Requirements
 
-The Connect iOS SDK supports iOS 11 or later.
+The Connect iOS SDK supports iOS 14 or later.
 
 > **Warning**: Support for deepLinkUrl parameters is deprecated from Connect iOS SDK version 3.0.0, going forward please use the redirectUrl parameter which supports both universal and deep links. 
 
