@@ -1,5 +1,9 @@
 # Connect iOS SDK ChangeLog
 
+## Version 3.0.1 - 2024-04-22 
+### Changes
+- Added Privacy Manifest XCPrivacy file - https://developer.apple.com/documentation/bundleresources/privacy_manifest_files
+
 ## Version 3.0.0 - 2023-10-10
 
 ### Enhancements
