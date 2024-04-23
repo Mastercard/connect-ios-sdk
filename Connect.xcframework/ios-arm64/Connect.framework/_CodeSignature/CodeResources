@@ -6,108 +6,144 @@
 	<dict>
 		<key>Headers/Connect-Swift.h</key>
 		<data>
-		r8AzQUmWpGJ0sddiEEUHzQ1jTMM=
+		C1CrpijPK4W3aq9nO6c6aCaOuiA=
 		</data>
 		<key>Headers/Connect.h</key>
 		<data>
-		6EfIg1zw/UGL2HRgd+wdvSx6qN4=
+		hKZ+4Y60ZUhAOWTuYQAChYHQDqs=
 		</data>
 		<key>Info.plist</key>
 		<data>
-		kmRjmcj0hpyFcHjkZYWcdNnd2EM=
+		BHoisxxf3YTEvhG/C+K8A1pZc/8=
+		</data>
+		<key>Modules/Connect.swiftmodule/arm64-apple-ios.abi.json</key>
+		<data>
+		qOGBHi7EOeeE0NOlVSqdWgybu4o=
+		</data>
+		<key>Modules/Connect.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
+		<data>
+		pFHj93Djv1hqUjpdpHuX715G9cE=
 		</data>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<data>
-		1Bmc6XabSO5Xeh3RmFHFdz9Cb7k=
+		c8NkXjtYgNFpv18m/EWvQecS8iM=
 		</data>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<data>
-		MNuk+N1ZDtdlUEraF65KLbSRv30=
+		pFHj93Djv1hqUjpdpHuX715G9cE=
 		</data>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<data>
-		SsZvENWSS7bpgt2pdt663sSrFlg=
-		</data>
-		<key>Modules/Connect.swiftmodule/arm64.swiftdoc</key>
-		<data>
-		1Bmc6XabSO5Xeh3RmFHFdz9Cb7k=
-		</data>
-		<key>Modules/Connect.swiftmodule/arm64.swiftinterface</key>
-		<data>
-		MNuk+N1ZDtdlUEraF65KLbSRv30=
-		</data>
-		<key>Modules/Connect.swiftmodule/arm64.swiftmodule</key>
-		<data>
-		SsZvENWSS7bpgt2pdt663sSrFlg=
+		b1ZuXJfaBLmCGvpBaKAVyRUGpbs=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
-		Jh7t5uo9dAFM+DldPlQlfzwF8JE=
+		LB6gTpSMxPjoGjQ5dNQ8EgnJxFY=
+		</data>
+		<key>PrivacyInfo.xcprivacy</key>
+		<data>
+		u9WCeri5eGsZiaIX9So8vlxvycY=
 		</data>
 	</dict>
 	<key>files2</key>
 	<dict>
 		<key>Headers/Connect-Swift.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			C1CrpijPK4W3aq9nO6c6aCaOuiA=
+			</data>
 			<key>hash2</key>
 			<data>
-			+/Lb4W3dZrn8P8t/mRA47dKDqokBHkYJazdHskfws5w=
+			7QggagqX/jB5ej09qUdguDGAVSM0JRV9ihdvbIS8JLU=
 			</data>
 		</dict>
 		<key>Headers/Connect.h</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			hKZ+4Y60ZUhAOWTuYQAChYHQDqs=
+			</data>
 			<key>hash2</key>
 			<data>
-			32jM/EBcHyaFRwGcoJ3DUaSIMX1W29VNpz6BNVX6eo0=
+			Ain6Ck5L2kt5vhK2VOXbFFCqKYArSfnuoQKXJssGoBw=
+			</data>
+		</dict>
+		<key>Modules/Connect.swiftmodule/arm64-apple-ios.abi.json</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			qOGBHi7EOeeE0NOlVSqdWgybu4o=
+			</data>
+			<key>hash2</key>
+			<data>
+			9pd1wk/ZcL9OwPwsHcNJVh3ChHi1A1ca0dJuRvCIgA8=
+			</data>
+		</dict>
+		<key>Modules/Connect.swiftmodule/arm64-apple-ios.private.swiftinterface</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			pFHj93Djv1hqUjpdpHuX715G9cE=
+			</data>
+			<key>hash2</key>
+			<data>
+			pz7VchsRZrcHtq/D3cs0mAtuzKbiwVW5wp9fY0JBc4E=
 			</data>
 		</dict>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftdoc</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			c8NkXjtYgNFpv18m/EWvQecS8iM=
+			</data>
 			<key>hash2</key>
 			<data>
-			Xj6+0U2iPXyIwpiQGUDRbW10vTUG76ipBnyo00fMMzY=
+			WI8M7SCCdmn9fCVR7r/995Kx6zrnAB1Dj6HVNuVQkF8=
 			</data>
 		</dict>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftinterface</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			pFHj93Djv1hqUjpdpHuX715G9cE=
+			</data>
 			<key>hash2</key>
 			<data>
-			6SYP1juebrcFlm9LDNMzsCdecXtigyCvcAvz7y5dkjE=
+			pz7VchsRZrcHtq/D3cs0mAtuzKbiwVW5wp9fY0JBc4E=
 			</data>
 		</dict>
 		<key>Modules/Connect.swiftmodule/arm64-apple-ios.swiftmodule</key>
 		<dict>
-			<key>hash2</key>
+			<key>hash</key>
 			<data>
-			wMQmOHDtDN1DztE9BWIl7gEjtXDyL+q3KBoGFwWqKdk=
+			b1ZuXJfaBLmCGvpBaKAVyRUGpbs=
 			</data>
-		</dict>
-		<key>Modules/Connect.swiftmodule/arm64.swiftdoc</key>
-		<dict>
 			<key>hash2</key>
 			<data>
-			Xj6+0U2iPXyIwpiQGUDRbW10vTUG76ipBnyo00fMMzY=
-			</data>
-		</dict>
-		<key>Modules/Connect.swiftmodule/arm64.swiftinterface</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			6SYP1juebrcFlm9LDNMzsCdecXtigyCvcAvz7y5dkjE=
-			</data>
-		</dict>
-		<key>Modules/Connect.swiftmodule/arm64.swiftmodule</key>
-		<dict>
-			<key>hash2</key>
-			<data>
-			wMQmOHDtDN1DztE9BWIl7gEjtXDyL+q3KBoGFwWqKdk=
+			keV9ms9oUOvJgZOaUT08S5S+/hTLl5ur8q9jQkJNBHU=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>
 		<dict>
+			<key>hash</key>
+			<data>
+			LB6gTpSMxPjoGjQ5dNQ8EgnJxFY=
+			</data>
 			<key>hash2</key>
 			<data>
-			v7CxA409oSrZ9W+VSdPKxC1C0RA73o6dXczd+xxIZdM=
+			Zaf2vxznz4dKk3p/IT2Ie+UAkTDgtuFPueeRENZmctE=
+			</data>
+		</dict>
+		<key>PrivacyInfo.xcprivacy</key>
+		<dict>
+			<key>hash</key>
+			<data>
+			u9WCeri5eGsZiaIX9So8vlxvycY=
+			</data>
+			<key>hash2</key>
+			<data>
+			DKIqPyqCXuIJ3iNSSDvV9KUOPA+7djc+SZg6sXmHM8Y=
 			</data>
 		</dict>
 	</dict>
