@@ -3,7 +3,7 @@
 //  ConnectWrapper
 //
 //  Created by Jimmie Wright on 2/2/21.
-//  Copyright © 2024 MastercardOpenBanking. All rights reserved.
+//  Copyright © 2021 MastercardOpenBanking. All rights reserved.
 //
 
 import Foundation
