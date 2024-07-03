@@ -1,8 +1,8 @@
 # Connect iOS SDK ChangeLog
 
 ## Version 3.0.2 - 2024-07-03
-### Enhancements
-- Added fix to enhance experience of opening external app for Connect Lite URL flow.
+### Changes
+- Added a fix to resolve an issue with App To App OAuth flow 
 
 
 ## Version 3.0.1 - 2024-04-22 
