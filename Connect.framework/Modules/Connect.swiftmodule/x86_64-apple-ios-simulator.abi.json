@@ -52,6 +52,16 @@
         ]
       },
       {
+        "kind": "Import",
+        "name": "Foundation",
+        "printedName": "Foundation",
+        "declKind": "Import",
+        "moduleName": "Connect",
+        "declAttributes": [
+          "RawDocComment"
+        ]
+      },
+      {
         "kind": "Function",
         "name": "sdkVersion",
         "printedName": "sdkVersion()",
@@ -1225,41 +1235,41 @@
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
       "offset": 1686,
-      "length": 12,
-      "value": "\"iosConnect\""
+      "length": 16,
+      "value": "\"maOBiOSConnect\""
     },
     {
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1744,
+      "offset": 1748,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1782,
+      "offset": 1786,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1822,
+      "offset": 1826,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1863,
+      "offset": 1867,
       "length": 5,
       "value": "false"
     },
     {
       "filePath": "\/Users\/e113257\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1909,
+      "offset": 1913,
       "length": 5,
       "value": "false"
     }
