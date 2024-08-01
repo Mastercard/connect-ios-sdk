@@ -1,5 +1,9 @@
 # Connect iOS SDK ChangeLog
 
+## Version 3.0.3 - 2024-08-01
+### Changes
+- Added a fix to resolve an issue with iOS OS version greater than 17.3
+
 ## Version 3.0.2 - 2024-07-03
 ### Changes
 - Added a fix to resolve an issue with App To App OAuth flow 
