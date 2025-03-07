@@ -1392,8 +1392,8 @@
         "children": [
           {
             "kind": "Var",
-            "name": "connectURLString",
-            "printedName": "connectURLString",
+            "name": "connectUrl",
+            "printedName": "connectUrl",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -1403,8 +1403,8 @@
               }
             ],
             "declKind": "Var",
-            "usr": "s:7Connect0A4ViewV16connectURLStringSSvp",
-            "mangledName": "$s7Connect0A4ViewV16connectURLStringSSvp",
+            "usr": "s:7Connect0A4ViewV10connectUrlSSvp",
+            "mangledName": "$s7Connect0A4ViewV10connectUrlSSvp",
             "moduleName": "Connect",
             "declAttributes": [
               "Preconcurrency",
@@ -1427,8 +1427,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV16connectURLStringSSvg",
-                "mangledName": "$s7Connect0A4ViewV16connectURLStringSSvg",
+                "usr": "s:7Connect0A4ViewV10connectUrlSSvg",
+                "mangledName": "$s7Connect0A4ViewV10connectUrlSSvg",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "get"
@@ -1451,8 +1451,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV16connectURLStringSSvs",
-                "mangledName": "$s7Connect0A4ViewV16connectURLStringSSvs",
+                "usr": "s:7Connect0A4ViewV10connectUrlSSvs",
+                "mangledName": "$s7Connect0A4ViewV10connectUrlSSvs",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "set"
@@ -1469,8 +1469,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV16connectURLStringSSvM",
-                "mangledName": "$s7Connect0A4ViewV16connectURLStringSSvM",
+                "usr": "s:7Connect0A4ViewV10connectUrlSSvM",
+                "mangledName": "$s7Connect0A4ViewV10connectUrlSSvM",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "_modify"
@@ -1479,8 +1479,8 @@
           },
           {
             "kind": "Var",
-            "name": "redirectURLString",
-            "printedName": "redirectURLString",
+            "name": "redirectUrl",
+            "printedName": "redirectUrl",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -1498,8 +1498,8 @@
               }
             ],
             "declKind": "Var",
-            "usr": "s:7Connect0A4ViewV17redirectURLStringSSSgvp",
-            "mangledName": "$s7Connect0A4ViewV17redirectURLStringSSSgvp",
+            "usr": "s:7Connect0A4ViewV11redirectUrlSSSgvp",
+            "mangledName": "$s7Connect0A4ViewV11redirectUrlSSSgvp",
             "moduleName": "Connect",
             "declAttributes": [
               "HasInitialValue",
@@ -1531,8 +1531,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV17redirectURLStringSSSgvg",
-                "mangledName": "$s7Connect0A4ViewV17redirectURLStringSSSgvg",
+                "usr": "s:7Connect0A4ViewV11redirectUrlSSSgvg",
+                "mangledName": "$s7Connect0A4ViewV11redirectUrlSSSgvg",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "get"
@@ -1563,8 +1563,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV17redirectURLStringSSSgvs",
-                "mangledName": "$s7Connect0A4ViewV17redirectURLStringSSSgvs",
+                "usr": "s:7Connect0A4ViewV11redirectUrlSSSgvs",
+                "mangledName": "$s7Connect0A4ViewV11redirectUrlSSSgvs",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "set"
@@ -1581,8 +1581,8 @@
                   }
                 ],
                 "declKind": "Accessor",
-                "usr": "s:7Connect0A4ViewV17redirectURLStringSSSgvM",
-                "mangledName": "$s7Connect0A4ViewV17redirectURLStringSSSgvM",
+                "usr": "s:7Connect0A4ViewV11redirectUrlSSSgvM",
+                "mangledName": "$s7Connect0A4ViewV11redirectUrlSSSgvM",
                 "moduleName": "Connect",
                 "implicit": true,
                 "accessorKind": "_modify"
@@ -1704,7 +1704,7 @@
           {
             "kind": "Constructor",
             "name": "init",
-            "printedName": "init(connectURLString:redirectURLString:delegate:)",
+            "printedName": "init(connectUrl:redirectUrl:delegate:)",
             "children": [
               {
                 "kind": "TypeNominal",
@@ -1750,8 +1750,8 @@
               }
             ],
             "declKind": "Constructor",
-            "usr": "s:7Connect0A4ViewV16connectURLString08redirectD08delegateACSS_SSSgAA0aB13EventDelegate_pSgtcfc",
-            "mangledName": "$s7Connect0A4ViewV16connectURLString08redirectD08delegateACSS_SSSgAA0aB13EventDelegate_pSgtcfc",
+            "usr": "s:7Connect0A4ViewV10connectUrl08redirectD08delegateACSS_SSSgAA0aB13EventDelegate_pSgtcfc",
+            "mangledName": "$s7Connect0A4ViewV10connectUrl08redirectD08delegateACSS_SSSgAA0aB13EventDelegate_pSgtcfc",
             "moduleName": "Connect",
             "declAttributes": [
               "Preconcurrency",

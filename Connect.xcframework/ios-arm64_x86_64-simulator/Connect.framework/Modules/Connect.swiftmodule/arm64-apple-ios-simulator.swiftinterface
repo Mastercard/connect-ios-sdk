@@ -60,10 +60,10 @@ public protocol ConnectViewEventDelegate {
   func onUser(_ data: Foundation.NSDictionary?)
 }
 @_Concurrency.MainActor @preconcurrency public struct ConnectView : SwiftUICore.View {
-  @_Concurrency.MainActor @preconcurrency public var connectURLString: Swift.String
-  @_Concurrency.MainActor @preconcurrency public var redirectURLString: Swift.String?
+  @_Concurrency.MainActor @preconcurrency public var connectUrl: Swift.String
+  @_Concurrency.MainActor @preconcurrency public var redirectUrl: Swift.String?
   @_Concurrency.MainActor @preconcurrency public var delegate: (any Connect.ConnectViewEventDelegate)?
-  @_Concurrency.MainActor @preconcurrency public init(connectURLString: Swift.String, redirectURLString: Swift.String? = nil, delegate: (any Connect.ConnectViewEventDelegate)? = nil)
+  @_Concurrency.MainActor @preconcurrency public init(connectUrl: Swift.String, redirectUrl: Swift.String? = nil, delegate: (any Connect.ConnectViewEventDelegate)? = nil)
   @_Concurrency.MainActor @preconcurrency public var body: some SwiftUICore.View {
     get
   }

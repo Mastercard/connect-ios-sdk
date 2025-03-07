@@ -10,9 +10,9 @@ import Connect
 
 struct ContentView: View {
     
-    @State var connectUrlText: String = ""
+    @State var connectUrl: String = ""
     @FocusState var isTextFieldFocused: Bool
-    @State var shouldLaunchConnect: Bool = false
+    @State var presentConnect: Bool = false
     
     var body: some View {
         ZStack {
@@ -47,7 +47,7 @@ struct ContentView: View {
                     .frame(height: 56)
                     .foregroundStyle(Color.white)
                     .overlay {
-                        TextField("Paste Generated Connect URL here.", text: $connectUrlText)
+                        TextField("Paste Generated Connect URL here.", text: $connectUrl)
                             .padding()
                             .focused($isTextFieldFocused)
                     }
@@ -57,7 +57,7 @@ struct ContentView: View {
                 
                 Button {
                     isTextFieldFocused = false
-                    shouldLaunchConnect = true
+                    presentConnect = true
                 } label: {
                     RoundedRectangle(cornerRadius: 24)
                         .frame(height: 48)
@@ -77,8 +77,8 @@ struct ContentView: View {
         .onTapGesture {
             isTextFieldFocused = false
         }
-        .fullScreenCover(isPresented: $shouldLaunchConnect) {
-            ConnectView(connectURLString: connectUrlText, delegate: self)
+        .fullScreenCover(isPresented: $presentConnect) {
+            ConnectView(connectUrl: connectUrl, delegate: self)
         }
         .onAppear {
             isTextFieldFocused = true
@@ -102,7 +102,7 @@ struct ContentView: View {
     }
     
     func isButtonDisabled() -> Bool {
-        return connectUrlText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        return connectUrl.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
     func displayData(_ data: NSDictionary?) {
@@ -110,13 +110,14 @@ struct ContentView: View {
     }
 }
 
+// MastercardOpenBankingConnect Delegate Methods
 extension ContentView: ConnectViewEventDelegate{
     func onCancel(_ data: NSDictionary?) {
         print("onCancel:")
         displayData(data)
         
         // Needed to dismiss the ConnectView
-        shouldLaunchConnect = false
+        presentConnect = false
     }
     
     func onDone(_ data: NSDictionary?) {
@@ -124,7 +125,7 @@ extension ContentView: ConnectViewEventDelegate{
         displayData(data)
         
         // Needed to dismiss the ConnectView
-        shouldLaunchConnect = false
+        presentConnect = false
     }
     
     func onError(_ data: NSDictionary?) {
@@ -132,7 +133,7 @@ extension ContentView: ConnectViewEventDelegate{
         displayData(data)
         
         // Needed to dismiss the ConnectView
-        shouldLaunchConnect = false
+        presentConnect = false
     }
     
     func onLoad() {
