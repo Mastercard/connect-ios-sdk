@@ -1,10 +1,10 @@
 # Connect iOS SDK ChangeLog
 
-## Version 3.1.0 - 2025-02-27
+## Version 3.1.0 - 2025-03-10
 ### Changes
-- Added Support for SwiftUI
+- Added support for SwiftUI
 - Added support for Swift Package Manager
-- Improved code quality
+- General enhancements
 
 ## Version 3.0.3 - 2024-08-01
 ### Changes
