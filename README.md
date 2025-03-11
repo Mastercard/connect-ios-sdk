@@ -20,13 +20,13 @@ The functionality available with Connect varies slightly between regions. For de
 
 ## Compatibility
 
-The Connect iOS SDK supports iOS 11 or later.
+The Connect iOS SDK supports iOS 15.6 or later.
 
 Note that this Connect SDK is not suitable for Mastercard Open Banking Europe. 
 
 ## ConnectWrapper Swift Sample App
 
-This repository contains a sample application ConnectWrapper written in Swift (requires Xcode 11 or greater) that demonstrates integration and use of Connect iOS SDK.
+This repository contains a sample application ConnectWrapper written in Swift and ConnectWrapperSwiftUI written in SwiftUI (requires Xcode 13.4 or greater) that demonstrates integration and use of Connect iOS SDK.
 
 
 

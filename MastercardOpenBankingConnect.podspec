@@ -1,7 +1,7 @@
 Pod::Spec.new do |spec|  
   spec.name         = "MastercardOpenBankingConnect"
   spec.module_name  = "Connect"
-  spec.version      = "3.0.3" 
+  spec.version      = "3.1.0"
   spec.summary      = "Connect iOS SDK"
   spec.description  = <<-DESC
                       The Connect iOS SDK allows you to embed MastercardOpenBanking Connect anywhere you want within your own mobile applications.
@@ -9,7 +9,7 @@ Pod::Spec.new do |spec|
   spec.homepage     = "https://developer.mastercard.com/open-banking-us/documentation/connect/integrating/"
   spec.license      = { :type => "MIT", :file => "LICENSE" }
   spec.author       = "MastercardOpenBanking"
-  spec.platform     = :ios, "14.0"
+  spec.platform     = :ios, "15.6"
   spec.source       = { :git => "https://github.com/Mastercard/connect-ios-sdk.git", :tag => "#{spec.version}" }
   spec.ios.vendored_frameworks = "Connect.xcframework"
   spec.resource_bundles = {'MastercardOpenBankingConnect' => ['Source/*.xcprivacy']}
