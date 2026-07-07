@@ -29,35 +29,6 @@
         "moduleName": "Connect"
       },
       {
-        "kind": "TypeDecl",
-        "name": "OpenLinkURL",
-        "printedName": "OpenLinkURL",
-        "declKind": "Class",
-        "usr": "s:7Connect11OpenLinkURLC",
-        "mangledName": "$s7Connect11OpenLinkURLC",
-        "moduleName": "Connect",
-        "declAttributes": [
-          "AccessControl"
-        ],
-        "hasMissingDesignatedInitializers": true,
-        "conformances": [
-          {
-            "kind": "Conformance",
-            "name": "Copyable",
-            "printedName": "Copyable",
-            "usr": "s:s8CopyableP",
-            "mangledName": "$ss8CopyableP"
-          },
-          {
-            "kind": "Conformance",
-            "name": "Escapable",
-            "printedName": "Escapable",
-            "usr": "s:s9EscapableP",
-            "mangledName": "$ss9EscapableP"
-          }
-        ]
-      },
-      {
         "kind": "Import",
         "name": "Foundation",
         "printedName": "Foundation",
@@ -66,37 +37,6 @@
         "declAttributes": [
           "RawDocComment"
         ]
-      },
-      {
-        "kind": "Import",
-        "name": "Foundation",
-        "printedName": "Foundation",
-        "declKind": "Import",
-        "moduleName": "Connect",
-        "declAttributes": [
-          "RawDocComment"
-        ]
-      },
-      {
-        "kind": "Function",
-        "name": "sdkVersion",
-        "printedName": "sdkVersion()",
-        "children": [
-          {
-            "kind": "TypeNominal",
-            "name": "String",
-            "printedName": "Swift.String",
-            "usr": "s:SS"
-          }
-        ],
-        "declKind": "Func",
-        "usr": "s:7Connect10sdkVersionSSyF",
-        "mangledName": "$s7Connect10sdkVersionSSyF",
-        "moduleName": "Connect",
-        "declAttributes": [
-          "AccessControl"
-        ],
-        "funcSelfKind": "NonMutating"
       },
       {
         "kind": "Import",
@@ -376,7 +316,8 @@
               "Custom",
               "HasStorage",
               "ReferenceOwnership",
-              "AccessControl"
+              "AccessControl",
+              "RawDocComment"
             ],
             "ownership": 1,
             "hasStorage": true,
@@ -1050,6 +991,44 @@
             ],
             "isFromExtension": true,
             "funcSelfKind": "NonMutating"
+          },
+          {
+            "kind": "Function",
+            "name": "safariViewController",
+            "printedName": "safariViewController(_:didCompleteInitialLoad:)",
+            "children": [
+              {
+                "kind": "TypeNominal",
+                "name": "Void",
+                "printedName": "()"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "SFSafariViewController",
+                "printedName": "SafariServices.SFSafariViewController",
+                "usr": "c:objc(cs)SFSafariViewController"
+              },
+              {
+                "kind": "TypeNominal",
+                "name": "Bool",
+                "printedName": "Swift.Bool",
+                "usr": "s:Sb"
+              }
+            ],
+            "declKind": "Func",
+            "usr": "c:@CM@Connect@objc(cs)ConnectViewController(im)safariViewController:didCompleteInitialLoad:",
+            "mangledName": "$s7Connect0A14ViewControllerC06safaribC0_22didCompleteInitialLoadySo08SFSafaribC0C_SbtF",
+            "moduleName": "Connect",
+            "objc_name": "safariViewController:didCompleteInitialLoad:",
+            "declAttributes": [
+              "Dynamic",
+              "ObjC",
+              "Preconcurrency",
+              "Custom",
+              "AccessControl"
+            ],
+            "isFromExtension": true,
+            "funcSelfKind": "NonMutating"
           }
         ],
         "declKind": "Class",
@@ -1139,6 +1118,13 @@
             "printedName": "Sendable",
             "usr": "s:s8SendableP",
             "mangledName": "$ss8SendableP"
+          },
+          {
+            "kind": "Conformance",
+            "name": "SendableMetatype",
+            "printedName": "SendableMetatype",
+            "usr": "s:s16SendableMetatypeP",
+            "mangledName": "$ss16SendableMetatypeP"
           },
           {
             "kind": "Conformance",
@@ -1884,128 +1870,177 @@
   },
   "ConstValues": [
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/OpenLinkURL.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/OpenLinkURL.swift",
       "kind": "BooleanLiteral",
-      "offset": 359,
+      "offset": 352,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "IntegerLiteral",
-      "offset": 852,
+      "offset": 849,
       "length": 1,
       "value": "0"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 977,
+      "offset": 973,
       "length": 5,
       "value": "\"ack\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1005,
+      "offset": 1001,
       "length": 12,
       "value": "\"closePopup\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1034,
+      "offset": 1030,
       "length": 6,
       "value": "\"ping\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1056,
+      "offset": 1052,
       "length": 5,
       "value": "\"url\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1125,
+      "offset": 1121,
       "length": 8,
       "value": "\"cancel\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1150,
+      "offset": 1146,
       "length": 6,
       "value": "\"done\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1174,
+      "offset": 1170,
       "length": 7,
       "value": "\"error\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1199,
+      "offset": 1195,
       "length": 7,
       "value": "\"route\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1223,
+      "offset": 1219,
       "length": 6,
       "value": "\"user\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1608,
+      "offset": 1260,
+      "length": 24,
+      "value": "\"trackPopupBlockedEvent\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1351,
+      "length": 18,
+      "value": "\"secure-container\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1387,
+      "length": 8,
+      "value": "\"fi-app\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1466,
+      "length": 22,
+      "value": "\"connect-client-event\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1519,
+      "length": 21,
+      "value": "\"partner-redirection\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1563,
+      "length": 13,
+      "value": "\"user-closed\""
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "StringLiteral",
+      "offset": 1819,
       "length": 2,
       "value": "\"\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "StringLiteral",
-      "offset": 1687,
+      "offset": 2085,
       "length": 16,
       "value": "\"maOBiOSConnect\""
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1749,
+      "offset": 2146,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1787,
+      "offset": 2183,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1827,
+      "offset": 2222,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1868,
+      "offset": 2262,
       "length": 5,
       "value": "false"
     },
     {
-      "filePath": "\/Users\/e164762\/Downloads\/MasterCard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
       "kind": "BooleanLiteral",
-      "offset": 1914,
+      "offset": 2307,
+      "length": 5,
+      "value": "false"
+    },
+    {
+      "filePath": "\/Users\/e164762\/Downloads\/Mastercard_Apps\/ios-sdk\/Connect\/ConnectViewController.swift",
+      "kind": "BooleanLiteral",
+      "offset": 2362,
       "length": 5,
       "value": "false"
     }
