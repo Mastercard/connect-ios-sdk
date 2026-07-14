@@ -2,7 +2,7 @@
 
 ## Version 3.2.0 - 2026-07-14
 ### Changes
-- Added OAuth lifecycle events to enable tracking and monitoring throughout the OAuth journey.
+- Added OAuth lifecycle events for monitoring.
 
 ## Version 3.1.1 - 2025-10-29
 ### Changes
