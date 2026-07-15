@@ -1,5 +1,9 @@
 # Connect iOS SDK ChangeLog
 
+## Version 3.2.0 - 2026-07-15
+### Changes
+- Added OAuth lifecycle events for monitoring.
+
 ## Version 3.1.1 - 2025-10-29
 ### Changes
 - Fixed modal layout issue causing footer logo of Connect screen to be cut off at bottom.
