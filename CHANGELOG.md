@@ -1,6 +1,6 @@
 # Connect iOS SDK ChangeLog
 
-## Version 3.2.0 - 2026-07-14
+## Version 3.2.0 - 2026-07-15
 ### Changes
 - Added OAuth lifecycle events for monitoring.
 
